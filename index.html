@@ -27,8 +27,8 @@ img { max-width: 100%; }
   --line: #e7e0e4;
   --meal: #f1ecee;
   --accent: #b83453;
-  --evening: #241b2f;
-  --on-evening: #fbf8f6;
+  --evening: #8a8091;
+  --on-evening: #ffffff;
   --ev-u26: #00539a;
   --ev-u21: #2a7d3c;
   --ev-u26w: #a87800;
@@ -44,14 +44,14 @@ img { max-width: 100%; }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #17121d; --surface: #211a29; --ink: #f1ebf2; --muted: #a99fb0; --line: #352c3e; --meal: #2a2232;
-    --accent: #ec7b95; --evening: #f1ebf2; --on-evening: #17121d;
+    --accent: #ec7b95; --evening: #6a6072; --on-evening: #f1ebf2;
     --ev-u26: #6fa6e6; --ev-u21: #6cc77e; --ev-u26w: #f0c44c; --ev-u16: #f27a82; --ev-chal: #b493ea;
     --tint: 20%; --shade-camp: 34%; --shade-play: 14%; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #17121d; --surface: #211a29; --ink: #f1ebf2; --muted: #a99fb0; --line: #352c3e; --meal: #2a2232;
-  --accent: #ec7b95; --evening: #f1ebf2; --on-evening: #17121d;
+  --accent: #ec7b95; --evening: #6a6072; --on-evening: #f1ebf2;
   --ev-u26: #6fa6e6; --ev-u21: #6cc77e; --ev-u26w: #f0c44c; --ev-u16: #f27a82; --ev-chal: #b493ea;
   --tint: 20%; --shade-camp: 34%; --shade-play: 14%; color-scheme: dark;
 }
@@ -116,7 +116,7 @@ nav.cats { display: flex; gap: 6px; overflow-x: auto; padding-block: 16px 18px; 
 .blk .nt { font-size: 11.5px; opacity: .85; }
 .blk.camp { background: color-mix(in srgb, var(--c) var(--shade-camp), var(--surface)); border-left: 4px solid var(--c); }
 .blk.match, .blk.ko { background: color-mix(in srgb, var(--c) var(--shade-play), var(--surface)); border-left: 4px solid var(--c); }
-.blk.meal { background: repeating-linear-gradient(135deg, var(--meal) 0 6px, transparent 6px 12px); color: var(--muted); border: 1px solid var(--line); }
+.blk.meal { background: var(--meal); color: var(--muted); }
 .blk.arrive { border: 1.5px dashed var(--c); background: var(--surface); }
 .blk.span { background: var(--evening); color: var(--on-evening); }
 .blk.span.soft { background: var(--surface); color: var(--ink); border: 1.5px dashed var(--evening); }
@@ -158,6 +158,10 @@ td.cell > .cut { position: absolute; left: -8px; top: 50%; transform: translateY
 .colhead > .cut { position: absolute; left: -8px; top: 12px; z-index: 4; }
 .colhead { padding-left: 13px !important; }
 .legend .cut { margin-right: 2px; --c: var(--ink); }
+.drop { font-style: normal; display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); color: var(--c); box-shadow: 0 0 0 1.5px var(--c); }
+.drop .ico { width: 10px; height: 10px; stroke-width: 2.75; transform: rotate(45deg); }
+td.cell > .drop { position: absolute; right: -8px; bottom: -8px; z-index: 3; }
+.legend .drop { margin-right: 2px; }
 /* Overview cells use the same visual language as the timetable blocks */
 td.cell button { all: unset; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; width: 100%; height: 84px; padding: 8px 9px 7px 12px; cursor: pointer; line-height: 1.3; overflow: hidden; box-shadow: inset 4px 0 0 var(--c); }
 td.cell button .lab { white-space: pre-line; }
@@ -186,7 +190,7 @@ tr.evening td { padding: 8px 10px; color: var(--muted); font-weight: 500; }
 .sw { width: 18px; height: 12px; border-radius: 3px; display: inline-block; }
 .sw.camp { background: color-mix(in srgb, var(--ink) var(--shade-camp), var(--surface)); border-left: 3px solid var(--ink); }
 .sw.match, .sw.ko { background: color-mix(in srgb, var(--ink) var(--shade-play), var(--surface)); border-left: 3px solid var(--ink); }
-.sw.meal { background: repeating-linear-gradient(135deg, var(--meal) 0 3px, transparent 3px 6px); border: 1px solid var(--line); }
+.sw.meal { background: var(--meal); border: 1px solid var(--line); }
 .sw.span { background: var(--evening); }
 .sw.arrive { border: 1.5px dashed var(--ink); }
 .legend .ico { width: 13px; height: 13px; color: var(--ink); }
@@ -269,6 +273,7 @@ function cutBefore(ev, i) {
   return a !== null && b !== null && b < a;
 }
 const cutMark = `<i class="cut" title="Field is cut">${icon("arrow")}</i>`;
+const dropMark = (to) => `<i class="drop" style="--c:${color(to)}" title="Can drop into the ${EVENTS[to].name}">${icon("arrow")}</i>`;
 const ORDER = ["u26", "u21", "u26w", "u16", "chal"];
 
 // ---------- building blocks ----------
@@ -354,7 +359,7 @@ const DAYS = [
       span("20:00", "22:00", "Crazy Bridge"),
     ] },
   { id: "dec30", dow: "Wed", date: "Dec 30", long: "Wednesday, December 30",
-    label: { u26: "USA1 Semifinal\nUSA2 Stage 1", u21: "USA1 Semifinal", u26w: "Training camp", u16: "Qualifying 1 of 2", chal: "Training camp" },
+    label: { u26: "USA1 SF\nUSA2 Stage 1", u21: "USA1 SF", u26w: "Training camp", u16: "Qualifier (1/2)", chal: "Training camp" },
     count: { u26: "4 + 4 teams", u21: "4 teams", u26w: "8 pairs", u16: "14 pairs", chal: "Pairs TBD" },
     items: [
       ...ko("u26"), ...ko("u21"),
@@ -364,7 +369,8 @@ const DAYS = [
       MENTOR(),
     ] },
   { id: "dec31", dow: "Thu", date: "Dec 31", long: "Thursday, December 31",
-    label: { u26: "USA1 Final\nUSA2 Quarterfinal", u21: "USA1 Final\nUSA2 Semifinal", u26w: "Final 1 of 3", u16: "Qualifying 2 of 2", chal: "Training camp" },
+    label: { u26: "USA1 Final (1/2)\nUSA2 QF", u21: "USA1 Final\nUSA2 SF", u26w: "Final (1/3)", u16: "Qualifier (2/2)", chal: "Training camp" },
+    drop: { u16: "chal" },
     count: { u26: "2 + 4 teams", u21: "2 + 2 teams", u26w: "8 pairs", u16: "14 pairs", chal: "Pairs TBD" },
     items: [
       ...ko("u26"), ...ko("u21"),
@@ -374,33 +380,33 @@ const DAYS = [
       MENTOR(),
     ] },
   { id: "jan1", dow: "Fri", date: "Jan 1", long: "Friday, January 1",
-    label: { u26: "USA1 Final\nUSA2 Semifinal", u21: "USA2 Final", u26w: "Final 2 of 3\nDrop-ins OK", u16: "Final 1 of 2", chal: "Day 1 of 2" },
+    label: { u26: "USA1 Final (2/2)\nUSA2 SF", u21: "USA2 Final", u26w: "Final (2/3)\nDrop-ins OK", u16: "Final (1/2)", chal: "Day (1/2)\nU16 drop-ins OK" },
     count: { u26: "2 + 2 teams", u21: "2 teams", u26w: "8 pairs", u16: "8 pairs", chal: "Pairs TBD" },
     items: [
       ...play("u26", KO, "Segment", 5, 15, 61, KO_MEALS),
       ...ko("u21"),
       ...play("u26w", W_ROUNDS, "Round", 8, 8, 57, W_MEALS),
       ...play("u16", U16_ROUNDS, "Round", 1, 8, 1, U16_MEALS),
-      ...chalPlay("Challenger Day 1"),
+      ...chalPlay("Challenger (1/2)"),
       MENTOR(),
     ] },
   { id: "jan2", dow: "Sat", date: "Jan 2", long: "Saturday, January 2",
-    label: { u26: "USA2 Final", u26w: "Final 3 of 3", u16: "Final 2 of 2", chal: "Day 2 of 2" },
+    label: { u26: "USA2 Final", u26w: "Final (3/3)", u16: "Final (2/2)", chal: "Day (2/2)" },
     count: { u26: "2 teams", u26w: "8 pairs", u16: "8 pairs", chal: "Pairs TBD" },
     items: [
       ...ko("u26"),
       ...play("u26w", W_ROUNDS, "Round", 15, 8, 113, W_MEALS),
       ...play("u16", U16_ROUNDS, "Round", 8, 8, 57, U16_MEALS),
-      ...chalPlay("Challenger Day 2"),
+      ...chalPlay("Challenger (2/2)"),
       MENTOR(),
     ] },
 ];
 const INTRO = {
-  u26:  "Two days of training camp, a 12-team round robin (11 matches of 10 boards), then 60-board knockouts: 4 segments of 15 boards per day. The USA1 Final runs 120 boards over two days.",
-  u21:  "Two days of training camp, a double round robin (14 matches of 8 boards, one bye per round), then 60-board knockouts: 4 segments of 15 boards per day.",
+  u26:  "One day of training camp, a 12-team round robin (11 matches of 10 boards), then 60-board knockouts: 4 segments of 15 boards per day. The USA1 Final runs 120 boards over two days.",
+  u21:  "One day of training camp, a double round robin (14 matches of 8 boards, one bye per round), then 60-board knockouts: 4 segments of 15 boards per day.",
   u26w: "Two days of training camp, then a three-day final. Each day is a full round robin of up to 8 pairs: 7 rounds of 8 boards.",
-  u16:  "Two days of training camp, a two-day qualifier (14 pairs, 13 rounds of 8 boards), then a two-day final for the top 8 pairs (double round robin, 14 rounds of 8 boards). Round times match the U26 Women schedule.",
-  chal: "Two days of training camp, then a two-day pairs event. Every day finishes by 5:30pm. Format depends on the number of pairs and will be announced.",
+  u16:  "Two days of training camp, a two-day qualifier (14 pairs, 13 rounds of 8 boards), then a two-day final for the top 8 pairs (double round robin, 14 rounds of 8 boards). Round times match the U26 Women schedule. Pairs that don't reach the final can drop into the U16 Challenger.",
+  chal: "Two days of training camp, then a two-day pairs event. U16 Open pairs that don't reach the final can drop in on day 1. Every day finishes by 5:30pm. Format depends on the number of pairs and will be announced.",
 };
 
 const START = 10 * 60, END = 22 * 60, PX = 1.1;
@@ -453,7 +459,7 @@ function renderOverview() {
       const lab = d.label[ev];
       if (!lab) return `<td class="cell empty"></td>`;
       const kind = dayKind(lab);
-      return `<td class="cell">${cutBefore(ev, i) ? cutMark : ""}<button class="${kind}" data-id="${ev}" aria-label="${esc(`${EVENTS[ev].name}, ${d.long}: ${lab.replace(/\n/g, " ")}, ${d.count[ev] || ""}`)}"><span class="lab">${icon(KIND_ICON[kind])}${esc(lab)}</span><span class="cnt">${esc(d.count[ev] || "")}</span></button></td>`;
+      return `<td class="cell">${cutBefore(ev, i) ? cutMark : ""}${d.drop?.[ev] ? dropMark(d.drop[ev]) : ""}<button class="${kind}" data-id="${ev}" aria-label="${esc(`${EVENTS[ev].name}, ${d.long}: ${lab.replace(/\n/g, " ")}, ${d.count[ev] || ""}`)}"><span class="lab">${icon(KIND_ICON[kind])}${esc(lab)}</span><span class="cnt">${esc(d.count[ev] || "")}</span></button></td>`;
     }).join("")
   }</tr>`).join("");
   const eveRow = (ic, txt) => `<div class="row">${icon(ic)}<span>${esc(txt)}</span></div>`;
@@ -506,7 +512,7 @@ function renderView() {
   v.querySelectorAll("td.cell button").forEach((b) => b.addEventListener("click", () => go(b.dataset.id)));
   const L = (sw, ic, txt) => `<span><i class="sw ${sw}"></i>${icon(ic)}${txt}</span>`;
   document.getElementById("legend").innerHTML = current === "overview"
-    ? L("camp", "camp", "Training camp") + L("match", "trophy", "Competition day") + L("arrive", "bag", "Arrivals day") + `<span>${cutMark}Field is cut (fewer teams or pairs continue)</span>`
+    ? L("camp", "camp", "Training camp") + L("match", "trophy", "Competition day") + L("arrive", "bag", "Arrivals day") + `<span>${cutMark}Field is cut (fewer teams or pairs continue)</span><span>${dropMark("chal")}U16 Open pairs not in the final can drop into the Challenger</span>`
     : L("camp", "camp", "Training camp") + L("match", "match", "Match / segment / round") + L("ko", "trophy", "Session, details TBD") + L("meal", "meal", "Meal break") + L("span", "moon", "Evening event") + `<span>${cutMark}Field is cut</span>`;
 }
 
