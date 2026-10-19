@@ -299,7 +299,7 @@ function play(ev, slots, prefix, first, bpr, b0, meals) {
 }
 const arrive = (ev) => [{ ev, s: "12:00", e: "18:00", k: "arrive", t: "Arrivals", n: "Hotel check-in from 4pm" }];
 const span = (s, e, t, n, soft) => ({ ev: "all", s, e, k: "span", t, n, soft });
-const MENTOR = () => span("20:00", "22:00", "Optional mentor review", "Everyone welcome", true);
+const MENTOR = () => span("20:00", "22:00", "Optional mentor review", "", true);
 
 // Teams round robin
 // Teams days: U26 and knockout afternoons start at 3:15pm (90-minute lunch), ending about 7pm
@@ -351,7 +351,7 @@ const DAYS = [
       ...play("u26", U26_RR.slice(0, 5), "Match", 7, 10, 1, [["13:45","15:15","Lunch"],["18:00","20:00","Dinner"]]),
       ...play("u21", U21_RR, "Match", 8, 8, 1, U21_MEALS),
       ...camp("u26w"), ...camp("u16"), ...arrive("chal"),
-      span("20:00", "22:00", "Crazy Bridge", "Everyone welcome"),
+      span("20:00", "22:00", "Crazy Bridge"),
     ] },
   { id: "dec30", dow: "Wed", date: "Dec 30", long: "Wednesday, December 30",
     label: { u26: "USA1 Semifinal\nUSA2 Stage 1", u21: "USA1 Semifinal", u26w: "Training camp", u16: "Qualifying 1 of 2", chal: "Training camp" },
