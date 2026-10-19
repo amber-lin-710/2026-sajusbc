@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Schedule, results and hotel info for the 2026 Sam Amer Junior US Bridge Championships (USBF), Hyatt Regency Santa Clara.">
-<link rel="icon" href="usbf-logo.png">
+<link rel="icon" href="favicon.png">
 <style>
 /* Base reset (the Artifact host added this automatically) */
 :root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
@@ -103,7 +103,7 @@ nav.cats { display: flex; gap: 6px; overflow-x: auto; padding-block: 16px 18px; 
 .colhead { position: sticky; top: 0; z-index: 3; background: var(--surface); padding: 10px 9px 9px; border-bottom: 1px solid var(--line); border-left: 1px solid var(--line); display: grid; gap: 2px; align-content: start; }
 .colhead b { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
 .colhead b small { font-weight: 500; color: var(--muted); font-size: 12px; margin-left: 4px; }
-.colhead span { font-size: 12px; line-height: 1.25; color: var(--c); font-weight: 600; }
+.colhead > span { font-size: 12px; line-height: 1.25; color: var(--c); font-weight: 600; }
 .corner { border-bottom: 1px solid var(--line); }
 .axis, .lane { position: relative; height: var(--h); }
 .lane { border-left: 1px solid var(--line); }
@@ -151,7 +151,7 @@ table.ov tbody th { padding: 10px; font-family: var(--font-display); font-weight
 table.ov tbody th small { display: block; font-family: var(--font-body); font-weight: 400; color: var(--muted); font-size: 12px; }
 table.ov tbody th .suit { margin-right: 6px; font-size: 15px; }
 td.cell { padding: 0; height: 84px; position: relative; overflow: visible !important; }
-.cut { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--surface); color: var(--c, var(--ink)); box-shadow: 0 0 0 1.5px var(--c, var(--ink)); }
+.cut { font-style: normal; flex: none; display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--surface); color: var(--c, var(--ink)); box-shadow: 0 0 0 1.5px var(--c, var(--ink)); }
 .cut .ico { width: 12px; height: 12px; stroke-width: 2.5; }
 td.cell > .cut { position: absolute; left: -11px; top: 50%; transform: translateY(-50%); z-index: 2; }
 .colhead { position: sticky; }
@@ -177,7 +177,7 @@ tr.evening td .row + .row { margin-top: 4px; }
 td.cell.empty { background: var(--bg); }
 tr.evening td { padding: 8px 10px; color: var(--muted); font-weight: 500; }
 .colhead { height: 92px; overflow: visible; }
-.colhead span { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.colhead > span { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .colhead .cnt { margin-top: auto; }
 
 .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 14px; font-size: 12px; color: var(--muted); }
@@ -267,7 +267,7 @@ function cutBefore(ev, i) {
   const a = headcount(DAYS[i - 1].count[ev]), b = headcount(DAYS[i].count[ev]);
   return a !== null && b !== null && b < a;
 }
-const cutMark = `<span class="cut" title="Field is cut">${icon("arrow")}</span>`;
+const cutMark = `<i class="cut" title="Field is cut">${icon("arrow")}</i>`;
 const ORDER = ["u26", "u21", "u26w", "u16", "chal"];
 
 // ---------- building blocks ----------
