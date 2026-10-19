@@ -60,7 +60,10 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font-body); 
 .wrap { max-width: 1240px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 56px; }
 
 header.mast { display: grid; grid-template-columns: auto 1fr; gap: 6px 20px; align-items: center; padding-bottom: 20px; border-bottom: 2px solid var(--ink); }
-header.mast .logo { grid-row: span 4; width: 96px; height: 96px; }
+header.mast .logo { grid-row: span 5; width: 96px; height: 96px; }
+header.mast .official { margin: 2px 0 0; font-weight: 700; }
+header.mast .official a { color: var(--ev-u26); text-decoration: underline; text-underline-offset: 3px; }
+header.mast .official a:hover { color: var(--accent); }
 header.mast .lede { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 18px; color: var(--accent); }
 
 nav.site { display: flex; gap: 4px 22px; flex-wrap: wrap; padding-top: 14px; border-bottom: 1px solid var(--line); }
@@ -72,7 +75,7 @@ section.pending { margin-top: 24px; padding: 40px 24px; background: var(--surfac
 section.pending h2 { margin: 0 0 6px; font-family: var(--font-display); font-size: 22px; }
 section.pending p { margin: 0; color: var(--muted); }
 header.mast > div:not(.logo), header.mast h1, header.mast p { min-width: 0; }
-@media (max-width: 520px) { header.mast .logo { width: 56px; height: 56px; grid-row: span 1; } header.mast .lede, header.mast .sub { grid-column: 1 / -1; } }
+@media (max-width: 520px) { header.mast .logo { width: 56px; height: 56px; grid-row: span 1; } header.mast .lede, header.mast .sub, header.mast .official { grid-column: 1 / -1; } }
 .eyebrow { font-family: var(--font-display); font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
 h1 { margin: 0; font-family: var(--font-display); font-weight: 800; letter-spacing: -.01em; font-size: clamp(28px, 5vw, 44px); line-height: 1.05; text-wrap: balance; }
 .sub { color: var(--muted); margin: 0; }
@@ -204,6 +207,7 @@ footer { margin-top: 28px; font-size: 13px; color: var(--muted); }
     <p class="lede">USBF Junior US Bridge Championships</p>
     <p class="sub">Hyatt Regency Santa Clara · 5101 Great America Pkwy, Santa Clara, CA 95054</p>
     <p class="sub"><span class="suits">♠<span class="k">♥</span>♦<span class="k">♣</span></span>&nbsp; Sunday, December 27, 2026 – Saturday, January 2, 2027 · Saturday, December 26 is arrivals day</p>
+    <p class="official"><a href="https://www.usbf.org/2026-sam-amer-jusbc">Official event page: usbf.org/2026-sam-amer-jusbc</a></p>
   </header>
 
   <nav class="site" id="site" aria-label="Site sections"></nav>
