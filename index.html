@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Schedule, results and hotel info for the 2026 Sam Amer Junior US Bridge Championships (USBF), Hyatt Regency Santa Clara.">
+<link rel="icon" href="usbf-logo.png">
+<style>
+/* Base reset (the Artifact host added this automatically) */
+:root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+</style>
+<title>2026 Sam Amer JUSBC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;600;700&family=DM+Mono:wght@500&display=swap">
+<style>
+/* Layout: masthead with USBF mark → category tabs → week time-grid for one category (columns = days) on wide screens, day-by-day agenda on phones */
+/* Palette: taken from the USBF mark — raspberry (♥♦) and royal blue (♠♣) on a warm white, deep aubergine ink */
+:root {
+  --bg: #fbf8f6;
+  --surface: #ffffff;
+  --ink: #241b2f;
+  --muted: #6c6275;
+  --line: #e7e0e4;
+  --meal: #f1ecee;
+  --accent: #b83453;
+  --evening: #241b2f;
+  --on-evening: #fbf8f6;
+  --ev-u26: #00539a;
+  --ev-u21: #2a7d3c;
+  --ev-u26w: #a87800;
+  --ev-u16: #c62f3a;
+  --ev-chal: #7a4bb0;
+  --font-display: "Bricolage Grotesque", "Avenir Next", "Trebuchet MS", sans-serif;
+  --font-body: "Figtree", "Avenir Next", "Segoe UI", sans-serif;
+  --font-mono: "DM Mono", ui-monospace, Menlo, monospace;
+  --tint: 12%;
+  --shade-camp: 24%;
+  --shade-play: 9%;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #17121d; --surface: #211a29; --ink: #f1ebf2; --muted: #a99fb0; --line: #352c3e; --meal: #2a2232;
+    --accent: #ec7b95; --evening: #f1ebf2; --on-evening: #17121d;
+    --ev-u26: #6fa6e6; --ev-u21: #6cc77e; --ev-u26w: #f0c44c; --ev-u16: #f27a82; --ev-chal: #b493ea;
+    --tint: 20%; --shade-camp: 34%; --shade-play: 14%; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #17121d; --surface: #211a29; --ink: #f1ebf2; --muted: #a99fb0; --line: #352c3e; --meal: #2a2232;
+  --accent: #ec7b95; --evening: #f1ebf2; --on-evening: #17121d;
+  --ev-u26: #6fa6e6; --ev-u21: #6cc77e; --ev-u26w: #f0c44c; --ev-u16: #f27a82; --ev-chal: #b493ea;
+  --tint: 20%; --shade-camp: 34%; --shade-play: 14%; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.45; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 56px; }
+
+header.mast { display: grid; grid-template-columns: auto 1fr; gap: 6px 20px; align-items: center; padding-bottom: 20px; border-bottom: 2px solid var(--ink); }
+header.mast .logo { grid-row: span 4; width: 96px; height: 96px; }
+header.mast .lede { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 18px; color: var(--accent); }
+
+nav.site { display: flex; gap: 4px 22px; flex-wrap: wrap; padding-top: 14px; border-bottom: 1px solid var(--line); }
+.sitetab { all: unset; cursor: pointer; padding: 8px 2px 10px; font-family: var(--font-display); font-weight: 700; font-size: 15px; color: var(--muted); border-bottom: 3px solid transparent; margin-bottom: -1px; }
+.sitetab:hover { color: var(--ink); }
+.sitetab[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
+.sitetab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+section.pending { margin-top: 24px; padding: 40px 24px; background: var(--surface); border: 1px dashed var(--line); border-radius: 10px; text-align: center; }
+section.pending h2 { margin: 0 0 6px; font-family: var(--font-display); font-size: 22px; }
+section.pending p { margin: 0; color: var(--muted); }
+header.mast > div:not(.logo), header.mast h1, header.mast p { min-width: 0; }
+@media (max-width: 520px) { header.mast .logo { width: 56px; height: 56px; grid-row: span 1; } header.mast .lede, header.mast .sub { grid-column: 1 / -1; } }
+.eyebrow { font-family: var(--font-display); font-weight: 700; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+h1 { margin: 0; font-family: var(--font-display); font-weight: 800; letter-spacing: -.01em; font-size: clamp(28px, 5vw, 44px); line-height: 1.05; text-wrap: balance; }
+.sub { color: var(--muted); margin: 0; }
+.suits { color: var(--accent); letter-spacing: .2em; }
+.suits .k { color: var(--ink); }
+
+nav.cats { display: flex; gap: 6px; overflow-x: auto; padding-block: 16px 18px; scrollbar-width: thin; }
+.tab { flex: 0 0 auto; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 8px; padding: 7px 12px 7px 10px; cursor: pointer; font: inherit; text-align: left; display: grid; grid-template-columns: auto auto; column-gap: 7px; align-items: center; line-height: 1.2; }
+.tab i { grid-row: span 2; font-style: normal; font-size: 18px; line-height: 1; width: 16px; text-align: center; color: var(--c, var(--ink)); font-family: "Segoe UI Symbol", "Apple Symbols", serif; }
+.tab i .ico { width: 16px; height: 16px; }
+.tab b { font-family: var(--font-display); font-size: 13px; font-weight: 700; }
+.tab span { font-size: 12px; color: var(--muted); }
+.tab[aria-selected="true"] { background: var(--c, var(--ink)); color: var(--surface); border-color: var(--c, var(--ink)); }
+.tab[aria-selected="true"] i { color: var(--surface); }
+.tab[aria-selected="true"] span { color: var(--surface); opacity: .85; }
+.tab:focus-visible, td.cell button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.viewhead { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; margin-bottom: 12px; }
+.viewhead h2 { margin: 0; font-family: var(--font-display); font-size: 24px; font-weight: 800; }
+.viewhead p { margin: 0; color: var(--muted); max-width: 70ch; }
+
+/* Week time grid */
+.gridwrap { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; }
+.grid { display: grid; grid-template-columns: 58px repeat(var(--cols), minmax(128px, 1fr)); grid-template-rows: 92px auto; min-width: calc(58px + var(--cols) * 128px); }
+.colhead { position: sticky; top: 0; z-index: 3; background: var(--surface); padding: 10px 9px 9px; border-bottom: 1px solid var(--line); border-left: 1px solid var(--line); display: grid; gap: 2px; align-content: start; }
+.colhead b { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
+.colhead b small { font-weight: 500; color: var(--muted); font-size: 12px; margin-left: 4px; }
+.colhead span { font-size: 12px; line-height: 1.25; color: var(--c); font-weight: 600; }
+.corner { border-bottom: 1px solid var(--line); }
+.axis, .lane { position: relative; height: var(--h); }
+.lane { border-left: 1px solid var(--line); }
+.hour { position: absolute; left: 0; right: 0; border-top: 1px solid var(--line); }
+.hour.half { border-top-style: dashed; opacity: .55; }
+.axis .t { position: absolute; right: 8px; transform: translateY(-50%); font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+.blk { position: absolute; left: 4px; right: 4px; border-radius: 6px; padding: 3px 7px; overflow: hidden; font-size: 12.5px; line-height: 1.22; display: grid; align-content: start; gap: 1px; z-index: 1; }
+.blk .tm { font-family: var(--font-mono); font-size: 10px; opacity: .8; }
+.blk .ti { font-weight: 700; }
+.blk .nt { font-size: 11.5px; opacity: .85; }
+.blk.camp { background: color-mix(in srgb, var(--c) var(--shade-camp), var(--surface)); border-left: 4px solid var(--c); }
+.blk.match, .blk.ko { background: color-mix(in srgb, var(--c) var(--shade-play), var(--surface)); border-left: 4px solid var(--c); }
+.blk.meal { background: repeating-linear-gradient(135deg, var(--meal) 0 6px, transparent 6px 12px); color: var(--muted); border: 1px solid var(--line); }
+.blk.arrive { border: 1.5px dashed var(--c); background: var(--surface); }
+.blk.span { background: var(--evening); color: var(--on-evening); }
+.blk.span.soft { background: var(--surface); color: var(--ink); border: 1.5px dashed var(--evening); }
+.blk.short { padding-block: 1px; }
+.blk.short .nt, .blk.short .tm { display: none; }
+.blk.short .ti::after { content: attr(data-nt); font-weight: 400; opacity: .8; margin-left: 6px; }
+
+/* Agenda (phones) */
+.agenda { display: none; gap: 14px; }
+.agenda section { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.agenda h3 { margin: 0; padding: 10px 14px; font-family: var(--font-display); font-size: 15px; border-bottom: 1px solid var(--line); display: grid; gap: 1px; }
+.agenda h3 span { font-family: var(--font-body); font-size: 13px; color: var(--c); font-weight: 600; }
+.agenda ol { list-style: none; margin: 0; padding: 0; }
+.agenda li { display: grid; grid-template-columns: 108px 1fr; gap: 10px; padding: 7px 14px; border-top: 1px solid var(--line); }
+.agenda li:first-child { border-top: none; }
+.agenda li .tm { font-family: var(--font-mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; padding-top: 2px; }
+.agenda li.meal { color: var(--muted); }
+.agenda li.span .ti { color: var(--accent); }
+.agenda li .nt { display: block; font-size: 13px; color: var(--muted); }
+.agenda li > div { min-width: 0; }
+
+/* Week overview */
+.ovwrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+/* Equal grid: first column fixed, every day column the same width, every body row the same height */
+table.ov { border-collapse: collapse; width: 100%; min-width: 1060px; font-size: 13px; table-layout: fixed; }
+table.ov col.lead { width: 150px; }
+table.ov th, table.ov td { border-bottom: 1px solid var(--line); border-left: 1px solid var(--line); vertical-align: top; text-align: left; overflow: hidden; }
+table.ov thead th { height: 54px; padding: 9px 10px; font-family: var(--font-display); font-weight: 700; background: var(--surface); }
+table.ov thead th span { display: block; font-family: var(--font-body); font-weight: 400; color: var(--muted); font-size: 12px; }
+table.ov tbody tr { height: 84px; }
+table.ov tbody th { padding: 10px; font-family: var(--font-display); font-weight: 700; border-left: none; }
+table.ov tbody th small { display: block; font-family: var(--font-body); font-weight: 400; color: var(--muted); font-size: 12px; }
+table.ov tbody th .suit { margin-right: 6px; font-size: 15px; }
+td.cell { padding: 0; height: 84px; position: relative; overflow: visible !important; }
+.cut { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--surface); color: var(--c, var(--ink)); box-shadow: 0 0 0 1.5px var(--c, var(--ink)); }
+.cut .ico { width: 12px; height: 12px; stroke-width: 2.5; }
+td.cell > .cut { position: absolute; left: -11px; top: 50%; transform: translateY(-50%); z-index: 2; }
+.colhead { position: sticky; }
+.colhead > .cut { position: absolute; left: -11px; top: 12px; z-index: 4; }
+.legend .cut { margin-right: 2px; --c: var(--ink); }
+/* Overview cells use the same visual language as the timetable blocks */
+td.cell button { all: unset; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; width: 100%; height: 84px; padding: 8px 9px 7px 12px; cursor: pointer; line-height: 1.3; overflow: hidden; box-shadow: inset 4px 0 0 var(--c); }
+td.cell button .lab { white-space: pre-line; }
+td.cell button .ico { margin-right: 5px; }
+td.cell button.camp { background: color-mix(in srgb, var(--c) var(--shade-camp), var(--surface)); }
+td.cell button.play { background: color-mix(in srgb, var(--c) var(--shade-play), var(--surface)); }
+td.cell button.arrive { background: var(--surface); box-shadow: none; border: 1.5px dashed var(--c); padding-left: 9px; }
+td.cell button:hover { filter: brightness(.97); }
+.cnt { font-size: 11.5px; font-weight: 700; color: var(--c); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+tr.evening td .row { display: grid; grid-template-columns: 16px 1fr; gap: 0 6px; }
+tr.evening td .row + .row { margin-top: 4px; }
+.ico { width: 14px; height: 14px; flex: none; vertical-align: -2px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.blk .ti .ico, .agenda .ti .ico { margin-right: 4px; width: 13px; height: 13px; }
+.sitetab .ico { margin-right: 6px; width: 15px; height: 15px; vertical-align: -2px; }
+.sitetab .suit { margin-right: 6px; font-size: 16px; }
+.suit { font-style: normal; font-family: "Segoe UI Symbol", "Apple Symbols", serif; color: var(--c, var(--ink)); }
+.viewhead h2 .suit { margin-right: 8px; }
+td.cell.empty { background: var(--bg); }
+tr.evening td { padding: 8px 10px; color: var(--muted); font-weight: 500; }
+.colhead { height: 92px; overflow: visible; }
+.colhead span { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.colhead .cnt { margin-top: auto; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 14px; font-size: 12px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 18px; height: 12px; border-radius: 3px; display: inline-block; }
+.sw.camp { background: color-mix(in srgb, var(--ink) var(--shade-camp), var(--surface)); border-left: 3px solid var(--ink); }
+.sw.match, .sw.ko { background: color-mix(in srgb, var(--ink) var(--shade-play), var(--surface)); border-left: 3px solid var(--ink); }
+.sw.meal { background: repeating-linear-gradient(135deg, var(--meal) 0 3px, transparent 3px 6px); border: 1px solid var(--line); }
+.sw.span { background: var(--evening); }
+.sw.arrive { border: 1.5px dashed var(--ink); }
+.legend .ico { width: 13px; height: 13px; color: var(--ink); }
+footer { margin-top: 28px; font-size: 13px; color: var(--muted); }
+
+@media (max-width: 760px) {
+  .wrap { padding-inline: 16px; }
+  .gridwrap { display: none; }
+  .agenda { display: grid; }
+}
+@media (prefers-reduced-motion: no-preference) { .tab { transition: background .15s, border-color .15s; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <img class="logo" src="usbf-logo.png" alt="USBF logo" width="84" height="84">
+    <h1>2026 Sam Amer JUSBC</h1>
+    <p class="lede">USBF Junior US Bridge Championships</p>
+    <p class="sub">Hyatt Regency Santa Clara · 5101 Great America Pkwy, Santa Clara, CA 95054</p>
+    <p class="sub"><span class="suits">♠<span class="k">♥</span>♦<span class="k">♣</span></span>&nbsp; Sunday, December 27, 2026 – Saturday, January 2, 2027 · Saturday, December 26 is arrivals day</p>
+  </header>
+
+  <nav class="site" id="site" aria-label="Site sections"></nav>
+
+  <section id="page-schedule">
+  <nav class="cats" id="cats" role="tablist" aria-label="Choose a category"></nav>
+
+  <main id="view"></main>
+
+  <div class="legend" id="legend" aria-hidden="true"></div>
+  <footer>All times Pacific (Santa Clara, CA). Draft schedule, subject to change.</footer>
+  </section>
+
+  <section id="page-other" class="pending" hidden>
+    <h2 id="pending-title"></h2>
+    <p>In progress. Check back closer to the event.</p>
+  </section>
+</div>
+
+<script>
+const EVENTS = {
+  u26:  { name: "U26 Open", sub: "Teams", suit: "♠" },
+  u21:  { name: "U21 Open", sub: "Teams", suit: "♣" },
+  u26w: { name: "U26 Women", sub: "Pairs", suit: "♦" },
+  u16:  { name: "U16 Open", sub: "Pairs", suit: "♥" },
+  chal: { name: "U16 Challenger", sub: "Pairs", suit: "★" },
+};
+const suit = (ev) => `<i class="suit" aria-hidden="true">${EVENTS[ev].suit}︎</i>`;
+
+// Line icons (24×24, stroked with currentColor)
+const PATHS = {
+  camp:   "M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z",
+  match:  "M7 3h8a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM20 7v12a2 2 0 0 1-2 2h-8M11 8l1.5 2.5L11 13l-1.5-2.5z",
+  trophy: "M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4zM7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4",
+  meal:   "M7 2v20M4 2v6a3 3 0 0 0 6 0V2M17 2c-2 2-3 5-3 8h3v12",
+  moon:   "M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z",
+  star:   "M12 2l3 6.5 7 .9-5.1 4.8 1.3 7L12 17.8 5.8 21.2l1.3-7L2 9.4l7-.9z",
+  party:  "M5.8 11.3 2 22l10.7-3.8M4 3h.01M22 8h.01M15 2h.01M22 20h.01M22 2l-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10M22 13l-.82-.33c-.86-.34-1.82.2-1.98 1.11-.11.7-.72 1.22-1.43 1.22H17M11 2l.33.82c.34.86-.2 1.82-1.11 1.98-.7.1-1.22.72-1.22 1.43V7M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2z",
+  chat:   "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z",
+  bag:    "M4 7h16v13H4zM9 7V4h6v3M9 11v5M15 11v5",
+  cal:    "M3 5h18v16H3zM3 10h18M8 3v4M16 3v4",
+  hotel:  "M4 21V3h12v18M16 9h4v12M8 7h4M8 11h4M8 15h4M2 21h20",
+  grid:   "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z",
+  arrow:  "M5 12h14M13 6l6 6-6 6",
+};
+const icon = (name) => `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="${PATHS[name]}"/></svg>`;
+function iconFor(it) {
+  if (it.k === "span") return /crazy/i.test(it.t) ? "party" : /mentor|Q&A/i.test(it.t) ? "chat" : "moon";
+  return { camp: "camp", match: "match", ko: "trophy", meal: "meal", arrive: "bag" }[it.k] || "match";
+}
+const dayKind = (label) => /^Training camp/.test(label) ? "camp" : /^Arrivals/.test(label) ? "arrive" : "play";
+const KIND_ICON = { camp: "camp", arrive: "bag", play: "trophy" };
+// A cut = fewer teams/pairs than the day before
+const headcount = (c) => { const m = (c || "").match(/\d+/g); return m ? m.reduce((a, b) => a + +b, 0) : null; };
+function cutBefore(ev, i) {
+  if (i === 0) return false;
+  const a = headcount(DAYS[i - 1].count[ev]), b = headcount(DAYS[i].count[ev]);
+  return a !== null && b !== null && b < a;
+}
+const cutMark = `<span class="cut" title="Field is cut">${icon("arrow")}</span>`;
+const ORDER = ["u26", "u21", "u26w", "u16", "chal"];
+
+// ---------- building blocks ----------
+const toMin = (t) => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+const toT = (m) => `${Math.floor(m / 60)}:${String(m % 60).padStart(2, "0")}`;
+// n slots of `dur` minutes separated by `gap`, starting at `start`
+const seq = (start, dur, gap, n) => Array.from({ length: n }, (_, i) => { const s = toMin(start) + i * (dur + gap); return [toT(s), toT(s + dur)]; });
+
+const camp = (ev, end = "18:00") => [
+  { ev, s: "10:00", e: "13:00", k: "camp", t: "Training camp", n: "Morning session" },
+  { ev, s: "13:00", e: "14:30", k: "meal", t: "Lunch" },
+  { ev, s: "14:30", e: end, k: "camp", t: "Training camp", n: "Afternoon session" },
+  { ev, s: "18:00", e: "20:00", k: "meal", t: "Dinner" },
+];
+// U16 Challenger: session blocks (format depends on sign-ups), everything ends by 5:30pm
+const chalPlay = (label) => [
+  { ev: "chal", s: "10:00", e: "13:30", k: "ko", t: label, n: "Session 1 · format TBD" },
+  { ev: "chal", s: "13:30", e: "15:00", k: "meal", t: "Lunch" },
+  { ev: "chal", s: "15:00", e: "17:30", k: "ko", t: label, n: "Session 2 · format TBD" },
+  { ev: "chal", s: "18:00", e: "20:00", k: "meal", t: "Dinner" },
+];
+// Numbered play: slots, label prefix, first number, boards each, first board, meals
+function play(ev, slots, prefix, first, bpr, b0, meals) {
+  return slots.map(([s, e], i) => {
+    const a = b0 + i * bpr;
+    return { ev, s, e, k: "match", t: `${prefix} ${first + i}`, n: `Boards ${a}–${a + bpr - 1}` };
+  }).concat(meals.map(([s, e, t]) => ({ ev, s, e, k: "meal", t })));
+}
+const arrive = (ev) => [{ ev, s: "12:00", e: "18:00", k: "arrive", t: "Arrivals", n: "Hotel check-in from 4pm" }];
+const span = (s, e, t, n, soft) => ({ ev: "all", s, e, k: "span", t, n, soft });
+const MENTOR = () => span("20:00", "22:00", "Optional mentor review", "Everyone welcome", true);
+
+// Teams round robin
+// Teams days: U26 and knockout afternoons start at 3:15pm (90-minute lunch), ending about 7pm
+const U26_RR = [...seq("10:00", 65, 15, 3), ...seq("15:15", 65, 15, 3)];          // 10-board matches
+const U26_MEALS = [["13:45","15:15","Lunch"],["19:00","20:00","Dinner"]];
+// U21 round robin is staggered from U26: 90-minute lunch, afternoon starts at 2:30pm
+const U21_RR = [...seq("10:00", 50, 15, 3), ...seq("14:30", 50, 15, 4)];          // 8-board matches
+const U21_MEALS = [["13:00","14:30","Lunch"],["18:35","20:00","Dinner"]];
+// Teams knockouts: 4 × 15-board segments (2024 SAJUSBC format)
+const KO = [["10:00","11:45"],["12:00","13:45"],["15:15","17:00"],["17:15","19:00"]];
+const KO_MEALS = [["13:45","15:15","Lunch"],["19:00","20:00","Dinner"]];
+const ko = (ev) => play(ev, KO, "Segment", 1, 15, 1, KO_MEALS);
+// Pairs days (U26 Women and U16 share one schedule): 8-board rounds of 55 min, 10-min changes,
+// 3 rounds in the morning, lunch 1:05–2:30, 4 rounds in the afternoon
+const W_ROUNDS = [...seq("10:00", 55, 10, 3), ...seq("14:30", 55, 10, 4)];
+const W_MEALS = [["13:05","14:30","Lunch"],["18:40","20:00","Dinner"]];
+const U16_ROUNDS = W_ROUNDS;
+const U16_MEALS = W_MEALS;
+
+const DAYS = [
+  { id: "dec26", dow: "Sat", date: "Dec 26", long: "Saturday, December 26",
+    label: { u26: "Arrivals day", u21: "Arrivals day" },
+    count: {},
+    items: [
+      ...arrive("u26"), ...arrive("u21"),
+      span("20:00", "22:00", "Optional casual bridge + mentor Q&A", "e.g., system notes", true),
+    ] },
+  { id: "dec27", dow: "Sun", date: "Dec 27", long: "Sunday, December 27",
+    label: { u26: "Training camp", u21: "Training camp", u16: "Arrivals day" },
+    count: { u26: "12 teams", u21: "7 teams" },
+    items: [...camp("u26"), ...camp("u21"), ...arrive("u16"),
+      span("20:00", "22:00", "Optional evening activity", "TBD", true),
+    ] },
+  { id: "dec28", dow: "Mon", date: "Dec 28", long: "Monday, December 28",
+    label: { u26: "Round robin\n6 × 10 boards", u21: "Round robin\n7 × 8 boards", u26w: "Arrivals day", u16: "Training camp" },
+    count: { u26: "12 teams", u21: "7 teams", u16: "14 pairs" },
+    items: [
+      ...play("u26", U26_RR, "Match", 1, 10, 1, U26_MEALS),
+      ...play("u21", U21_RR, "Match", 1, 8, 1, U21_MEALS),
+      ...camp("u16"), ...arrive("u26w"),
+      { ev: "u26", s: "20:00", e: "22:00", k: "span", t: "Optional mentor review", n: "U26 Open and U21 Open", soft: true },
+      { ev: "u21", s: "20:00", e: "22:00", k: "span", t: "Optional mentor review", n: "U26 Open and U21 Open", soft: true },
+      { ev: "u16", s: "20:00", e: "22:00", k: "span", t: "Optional casual bridge", soft: true },
+    ] },
+  { id: "dec29", dow: "Tue", date: "Dec 29", long: "Tuesday, December 29",
+    label: { u26: "Round robin\n5 × 10 boards", u21: "Round robin\n7 × 8 boards", u26w: "Training camp", u16: "Training camp", chal: "Arrivals day" },
+    count: { u26: "12 teams", u21: "7 teams", u26w: "8 pairs", u16: "14 pairs" },
+    items: [
+      ...play("u26", U26_RR.slice(0, 5), "Match", 7, 10, 1, [["13:45","15:15","Lunch"],["18:00","20:00","Dinner"]]),
+      ...play("u21", U21_RR, "Match", 8, 8, 1, U21_MEALS),
+      ...camp("u26w"), ...camp("u16"), ...arrive("chal"),
+      span("20:00", "22:00", "Crazy Bridge", "Everyone welcome"),
+    ] },
+  { id: "dec30", dow: "Wed", date: "Dec 30", long: "Wednesday, December 30",
+    label: { u26: "USA1 Semifinal\nUSA2 Stage 1", u21: "USA1 Semifinal", u26w: "Training camp", u16: "Qualifying 1 of 2", chal: "Training camp" },
+    count: { u26: "4 + 4 teams", u21: "4 teams", u26w: "8 pairs", u16: "14 pairs", chal: "Pairs TBD" },
+    items: [
+      ...ko("u26"), ...ko("u21"),
+      ...camp("u26w"),
+      ...play("u16", U16_ROUNDS, "Round", 1, 8, 1, U16_MEALS),
+      ...camp("chal", "17:30"),
+      MENTOR(),
+    ] },
+  { id: "dec31", dow: "Thu", date: "Dec 31", long: "Thursday, December 31",
+    label: { u26: "USA1 Final\nUSA2 Quarterfinal", u21: "USA1 Final\nUSA2 Semifinal", u26w: "Final 1 of 3", u16: "Qualifying 2 of 2", chal: "Training camp" },
+    count: { u26: "2 + 4 teams", u21: "2 + 2 teams", u26w: "8 pairs", u16: "14 pairs", chal: "Pairs TBD" },
+    items: [
+      ...ko("u26"), ...ko("u21"),
+      ...play("u26w", W_ROUNDS, "Round", 1, 8, 1, W_MEALS),
+      ...play("u16", U16_ROUNDS.slice(0, 6), "Round", 8, 8, 57, U16_MEALS),
+      ...camp("chal", "17:30"),
+      MENTOR(),
+    ] },
+  { id: "jan1", dow: "Fri", date: "Jan 1", long: "Friday, January 1",
+    label: { u26: "USA1 Final\nUSA2 Semifinal", u21: "USA2 Final", u26w: "Final 2 of 3\nDrop-ins OK", u16: "Final 1 of 2", chal: "Day 1 of 2" },
+    count: { u26: "2 + 2 teams", u21: "2 teams", u26w: "8 pairs", u16: "8 pairs", chal: "Pairs TBD" },
+    items: [
+      ...play("u26", KO, "Segment", 5, 15, 61, KO_MEALS),
+      ...ko("u21"),
+      ...play("u26w", W_ROUNDS, "Round", 8, 8, 57, W_MEALS),
+      ...play("u16", U16_ROUNDS, "Round", 1, 8, 1, U16_MEALS),
+      ...chalPlay("Challenger Day 1"),
+      MENTOR(),
+    ] },
+  { id: "jan2", dow: "Sat", date: "Jan 2", long: "Saturday, January 2",
+    label: { u26: "USA2 Final", u26w: "Final 3 of 3", u16: "Final 2 of 2", chal: "Day 2 of 2" },
+    count: { u26: "2 teams", u26w: "8 pairs", u16: "8 pairs", chal: "Pairs TBD" },
+    items: [
+      ...ko("u26"),
+      ...play("u26w", W_ROUNDS, "Round", 15, 8, 113, W_MEALS),
+      ...play("u16", U16_ROUNDS, "Round", 8, 8, 57, U16_MEALS),
+      ...chalPlay("Challenger Day 2"),
+      MENTOR(),
+    ] },
+];
+const INTRO = {
+  u26:  "Two days of training camp, a 12-team round robin (11 matches of 10 boards), then 60-board knockouts: 4 segments of 15 boards per day. The USA1 Final runs 120 boards over two days.",
+  u21:  "Two days of training camp, a double round robin (14 matches of 8 boards, one bye per round), then 60-board knockouts: 4 segments of 15 boards per day.",
+  u26w: "Two days of training camp, then a three-day final. Each day is a full round robin of up to 8 pairs: 7 rounds of 8 boards.",
+  u16:  "Two days of training camp, a two-day qualifier (14 pairs, 13 rounds of 8 boards), then a two-day final for the top 8 pairs (double round robin, 14 rounds of 8 boards). Round times match the U26 Women schedule.",
+  chal: "Two days of training camp, then a two-day pairs event. Every day finishes by 5:30pm. Format depends on the number of pairs and will be announced.",
+};
+
+const START = 10 * 60, END = 22 * 60, PX = 1.1;
+const fmt = (t) => { let [h, m] = t.split(":").map(Number); const ap = h >= 12 ? "pm" : "am"; h = h % 12 || 12; return m ? `${h}:${String(m).padStart(2,"0")}${ap}` : `${h}${ap}`; };
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+const color = (ev) => `var(--ev-${ev})`;
+const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+
+const ids = ["overview", ...ORDER];
+const PAGES = [
+  { id: "schedule", name: "Schedule", ic: "cal" },
+  { id: "u26w-results", name: "U26 Women Results", ev: "u26w" },
+  { id: "u16-results", name: "U16 Open Results", ev: "u16" },
+  { id: "hotel", name: "Hotel Info", ic: "hotel" },
+];
+const fromHash = location.hash.slice(1), saved = store.get("sajusbc-cat");
+let current = ids.includes(fromHash) ? fromHash : ids.includes(saved) ? saved : "overview";
+let page = PAGES.some((p) => p.id === fromHash) ? fromHash : "schedule";
+
+function renderSite() {
+  const el = document.getElementById("site");
+  el.innerHTML = PAGES.map((p) => `<button class="sitetab" id="site-${p.id}" data-id="${p.id}"${p.id === page ? ' aria-current="page"' : ""}${p.ev ? ` style="--c:${color(p.ev)}"` : ""}>${p.ev ? suit(p.ev) : icon(p.ic)}${p.name}</button>`).join("");
+  el.querySelectorAll(".sitetab").forEach((b) => b.addEventListener("click", () => {
+    page = b.dataset.id;
+    try { history.replaceState(null, "", "#" + (page === "schedule" ? current : page)); } catch {}
+    renderSite();
+  }));
+  document.getElementById("page-schedule").hidden = page !== "schedule";
+  const other = document.getElementById("page-other");
+  other.hidden = page === "schedule";
+  if (page !== "schedule") document.getElementById("pending-title").textContent = PAGES.find((p) => p.id === page).name;
+}
+
+function renderTabs() {
+  const el = document.getElementById("cats");
+  const tabs = [{ id: "overview", name: "Week overview", sub: "All categories" }, ...ORDER.map((id) => ({ id, ...EVENTS[id] }))];
+  el.innerHTML = tabs.map((t) => `<button class="tab" role="tab" id="tab-${t.id}" aria-selected="${t.id === current}" data-id="${t.id}"${t.id !== "overview" ? ` style="--c:${color(t.id)}"` : ""}><i aria-hidden="true">${t.id === "overview" ? icon("grid") : EVENTS[t.id].suit + "︎"}</i><b>${t.name}</b><span>${t.sub}</span></button>`).join("");
+  el.querySelectorAll(".tab").forEach((b) => b.addEventListener("click", () => go(b.dataset.id)));
+}
+function go(id) {
+  current = id; store.set("sajusbc-cat", id);
+  try { history.replaceState(null, "", "#" + id); } catch {}
+  renderTabs(); renderView(); window.scrollTo({ top: 0 });
+}
+
+function renderOverview() {
+  const head = DAYS.map((d) => `<th scope="col">${d.dow}<span>${d.date}</span></th>`).join("");
+  const rows = ORDER.map((ev) => `<tr style="--c:${color(ev)}"><th scope="row">${suit(ev)}${EVENTS[ev].name}<small>${EVENTS[ev].sub}</small></th>${
+    DAYS.map((d, i) => {
+      const lab = d.label[ev];
+      if (!lab) return `<td class="cell empty"></td>`;
+      const kind = dayKind(lab);
+      return `<td class="cell">${cutBefore(ev, i) ? cutMark : ""}<button class="${kind}" data-id="${ev}" aria-label="${esc(`${EVENTS[ev].name}, ${d.long}: ${lab.replace(/\n/g, " ")}, ${d.count[ev] || ""}`)}"><span class="lab">${icon(KIND_ICON[kind])}${esc(lab)}</span><span class="cnt">${esc(d.count[ev] || "")}</span></button></td>`;
+    }).join("")
+  }</tr>`).join("");
+  const eveRow = (ic, txt) => `<div class="row">${icon(ic)}<span>${esc(txt)}</span></div>`;
+  const eve = `<tr class="evening"><th scope="row">${icon("moon")} Evenings<small>8–10pm</small></th>${
+    DAYS.map((d) => {
+      const all = d.items.find((i) => i.ev === "all");
+      if (all) return `<td>${eveRow(iconFor(all), all.t)}</td>`;
+      // category-specific evenings: group by title, list the categories
+      const byTitle = {};
+      d.items.filter((i) => i.k === "span").forEach((i) => { (byTitle[i.t] ||= { it: i, evs: [] }).evs.push(EVENTS[i.ev].name); });
+      return `<td>${Object.entries(byTitle).map(([t, v]) => eveRow(iconFor(v.it), `${t} (${v.evs.join(", ")})`)).join("")}</td>`;
+    }).join("")
+  }</tr>`;
+  return `<div class="viewhead"><h2>Week at a glance</h2><p>Select a category for its full week with times.</p></div>
+    <div class="ovwrap"><table class="ov"><colgroup><col class="lead">${DAYS.map(() => "<col>").join("")}</colgroup><thead><tr><th></th>${head}</tr></thead><tbody>${rows}${eve}</tbody></table></div>`;
+}
+
+function blockHTML(it, ev) {
+  const top = (toMin(it.s) - START) * PX, h = (toMin(it.e) - toMin(it.s)) * PX - 3;
+  const short = h < 40;
+  return `<div class="blk ${it.k}${it.soft ? " soft" : ""}${short ? " short" : ""}" style="top:${top}px;height:${h}px;--c:${color(ev)}" title="${esc(`${fmt(it.s)}–${fmt(it.e)} ${it.t}${it.n ? " · " + it.n : ""}`)}">
+    <span class="tm">${fmt(it.s)}–${fmt(it.e)}</span><span class="ti" data-nt="${short && it.n ? esc(it.n) : ""}">${icon(iconFor(it))}${esc(it.t)}</span>${it.n ? `<span class="nt">${esc(it.n)}</span>` : ""}</div>`;
+}
+
+function renderCategory(ev) {
+  const days = DAYS.filter((d) => d.label[ev]);
+  const H = (END - START) * PX;
+  let axis = "", lines = "";
+  for (let m = START; m <= END; m += 30) {
+    const y = (m - START) * PX;
+    lines += `<div class="hour${m % 60 ? " half" : ""}" style="top:${y}px"></div>`;
+    if (m % 60 === 0) axis += `<span class="t" style="top:${y}px">${fmt(toT(m))}</span>`;
+  }
+  const dayItems = (d) => d.items.filter((i) => i.ev === ev || i.ev === "all").sort((a, b) => toMin(a.s) - toMin(b.s));
+  const heads = days.map((d) => `<div class="colhead" style="--c:${color(ev)}">${cutBefore(ev, DAYS.indexOf(d)) ? cutMark : ""}<b>${d.dow}<small>${d.date}</small></b><span>${esc(d.label[ev]).replace(/\n/g, "<br>")}</span><em class="cnt">${esc(d.count[ev] || "")}</em></div>`).join("");
+  const lanes = days.map((d) => `<div class="lane">${lines}${dayItems(d).map((i) => blockHTML(i, ev)).join("")}</div>`).join("");
+  const grid = `<div class="gridwrap"><div class="grid" style="--cols:${days.length};--h:${H}px">
+      <div class="corner"></div>${heads}
+      <div class="axis">${axis}</div>${lanes}
+    </div></div>`;
+  const agenda = days.map((d) => `<section style="--c:${color(ev)}"><h3>${d.long}<span>${esc(d.label[ev].replace(/\n/g, " · "))}</span><em class="cnt">${esc(d.count[ev] || "")}</em></h3><ol>${
+    dayItems(d).map((i) => `<li class="${i.k}"><span class="tm">${fmt(i.s)}–${fmt(i.e)}</span><div><span class="ti">${icon(iconFor(i))}${esc(i.t)}</span>${i.n ? `<span class="nt">${esc(i.n)}</span>` : ""}</div></li>`).join("")
+  }</ol></section>`).join("");
+  return `<div class="viewhead"><h2 style="--c:${color(ev)}">${suit(ev)}${EVENTS[ev].name} ${EVENTS[ev].sub}</h2><p>${esc(INTRO[ev])}</p></div>${grid}<div class="agenda">${agenda}</div>`;
+}
+
+function renderView() {
+  const v = document.getElementById("view");
+  v.innerHTML = current === "overview" ? renderOverview() : renderCategory(current);
+  v.querySelectorAll("td.cell button").forEach((b) => b.addEventListener("click", () => go(b.dataset.id)));
+  const L = (sw, ic, txt) => `<span><i class="sw ${sw}"></i>${icon(ic)}${txt}</span>`;
+  document.getElementById("legend").innerHTML = current === "overview"
+    ? L("camp", "camp", "Training camp") + L("match", "trophy", "Competition day") + L("arrive", "bag", "Arrivals day") + `<span>${cutMark}Field is cut (fewer teams or pairs continue)</span>`
+    : L("camp", "camp", "Training camp") + L("match", "match", "Match / segment / round") + L("ko", "trophy", "Session, details TBD") + L("meal", "meal", "Meal break") + L("span", "moon", "Evening event") + `<span>${cutMark}Field is cut</span>`;
+}
+
+renderSite(); renderTabs(); renderView();
+</script>
+</body>
+</html>
