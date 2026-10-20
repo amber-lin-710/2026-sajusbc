@@ -149,6 +149,8 @@ table.x td.team { cursor: pointer; font-weight: 700; }
 table.x td.team .no { color: var(--muted); font-weight: 600; margin-right: 6px; }
 table.x tbody tr td.self { background: var(--meal); }
 table.x td small { display: block; font-size: 10px; color: var(--muted); }
+table.x td a.mlink { display: block; width: fit-content; margin-left: auto; font-size: 10px; color: var(--muted); text-decoration: underline dotted; text-underline-offset: 2px; }
+table.x td a.mlink:hover { color: var(--ink); text-decoration-style: solid; }
 table.x td.tot { font-weight: 800; }
 /* USA1 qualifiers in the category color (U26 blue, U21 green); USA2 qualifiers grey */
 table.x td.tot.q1 { color: var(--c); }
@@ -345,7 +347,7 @@ footer { margin-top: 28px; font-size: 13px; color: var(--muted); }
   </section>
 </div>
 
-<script src="results-data.js?v=eccfb881"></script>
+<script src="results-data.js?v=402ca9cc"></script>
 <script>
 const EVENTS = {
   u26:  { name: "U26 Open", sub: "Teams", suit: "♠" },
@@ -612,14 +614,14 @@ function crossTable(rr, roster, d) {
   const hasBye = x.bye && Object.keys(x.bye).length;
   const cell = (a, b, j) => {
     if (a === b) return `<td class="self" data-col="${j}"></td>`;
-    const vp = (x.vp[a] || {})[b], im = ((x.imps || {})[a] || {})[b];
+    const vp = (x.vp[a] || {})[b], im = ((x.imps || {})[a] || {})[b], lbUrl = ((x.lb || {})[a] || {})[b];
     if (vp === undefined) return `<td data-col="${j}"></td>`;
-    return `<td data-col="${j}" title="${esc(`${a} v ${b}`)}">${f2(vp)}${im ? `<small>${im[0]}–${im[1]}</small>` : ""}</td>`;
+    return `<td data-col="${j}" title="${esc(`${a} v ${b}`)}">${f2(vp)}${im ? (lbUrl ? `<a class="mlink" href="${esc(lbUrl)}" target="_blank" rel="noopener" title="Open this match on LoveBridge">${im[0]}–${im[1]}</a>` : `<small>${im[0]}–${im[1]}</small>`) : ""}</td>`;
   };
   const table = `<div class="tblwrap"><table class="x"><thead><tr><th class="rkh">Rank</th><th class="l">Team</th><th>Total</th>${carry ? "<th>Carry</th>" : ""}${x.teams.map((t, j) => `<th data-col="${j}" title="${esc(t)}">${esc(no(t))}</th>`).join("")}${hasBye ? "<th>Bye</th>" : ""}</tr></thead><tbody>${
     x.teams.map((a, i) => `<tr data-row="${i}"${i > 0 && q(a) !== q(x.teams[i - 1]) ? ' class="gs"' : ""}><td class="rk">${(byTeam[a] || [])[ci("rank")] ?? ""}</td><td class="l team" data-row="${i}"><span class="no">${esc(no(a))}.</span>${tm(a, roster)}</td><td class="tot ${q(a)}">${f2((byTeam[a] || [])[ci("total_vp")])}</td>${carry ? `<td>${f2((byTeam[a] || [])[ci("carryover_vp_from_rr1")])}</td>` : ""}${x.teams.map((b, j) => cell(a, b, j)).join("")}${hasBye ? `<td>${f2((x.bye || {})[a])}</td>` : ""}</tr>`).join("")
   }</tbody></table></div>`;
-  const key = `<p class="xkey">Teams are listed in finishing order; column numbers are team numbers. Each box shows the row team's VPs with the IMP score underneath. ${usa1.size ? '<b class="q1">Colored totals</b> qualified for the USA1 knockout' : ""}${usa2.size ? ', <b class="q2">grey totals</b> for USA2' : ""}. Thick lines separate the qualifiers for each knockout. Click anywhere in a row to highlight that team.</p>`;
+  const key = `<p class="xkey">Teams are listed in finishing order; column numbers are team numbers. Each box shows the row team's VPs with the IMP score underneath; click an IMP score to open that match on LoveBridge. ${usa1.size ? '<b class="q1">Colored totals</b> qualified for the USA1 knockout' : ""}${usa2.size ? ', <b class="q2">grey totals</b> for USA2' : ""}. Thick lines separate the qualifiers for each knockout. Click anywhere in a row to highlight that team.</p>`;
   return table + key;
 }
 function bracket(pfx, d, roster) {
@@ -698,7 +700,7 @@ addEventListener("resize", () => { markBracketWraps(); drawBracketArrows(); });
 // Cross table: click a team to highlight its row and column
 document.addEventListener("click", (e) => {
   const td = e.target.closest("table.x tbody td");
-  if (!td) return;
+  if (!td || e.target.closest("a")) return;
   const tr = td.parentElement, t = td.closest("table"), i = tr.dataset.row, on = !tr.classList.contains("hl");
   t.querySelectorAll(".hl, .hlc").forEach((el) => el.classList.remove("hl", "hlc"));
   if (on) {
