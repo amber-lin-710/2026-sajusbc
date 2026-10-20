@@ -29,6 +29,7 @@ img { max-width: 100%; }
   --accent: #b83453;
   --evening: #8a8091;
   --on-evening: #ffffff;
+  --on-accent: #ffffff;
   --ev-u26: #00539a;
   --ev-u21: #2a7d3c;
   --ev-u26w: #a87800;
@@ -44,14 +45,14 @@ img { max-width: 100%; }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #17121d; --surface: #211a29; --ink: #f1ebf2; --muted: #a99fb0; --line: #352c3e; --meal: #2a2232;
-    --accent: #ec7b95; --evening: #6a6072; --on-evening: #f1ebf2;
+    --accent: #ec7b95; --evening: #6a6072; --on-evening: #f1ebf2; --on-accent: #17121d;
     --ev-u26: #6fa6e6; --ev-u21: #6cc77e; --ev-u26w: #f0c44c; --ev-u16: #f27a82; --ev-chal: #b493ea;
     --tint: 20%; --shade-camp: 34%; --shade-play: 14%; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #17121d; --surface: #211a29; --ink: #f1ebf2; --muted: #a99fb0; --line: #352c3e; --meal: #2a2232;
-  --accent: #ec7b95; --evening: #6a6072; --on-evening: #f1ebf2;
+  --accent: #ec7b95; --evening: #6a6072; --on-evening: #f1ebf2; --on-accent: #17121d;
   --ev-u26: #6fa6e6; --ev-u21: #6cc77e; --ev-u26w: #f0c44c; --ev-u16: #f27a82; --ev-chal: #b493ea;
   --tint: 20%; --shade-camp: 34%; --shade-play: 14%; color-scheme: dark;
 }
@@ -71,6 +72,49 @@ nav.site { display: flex; gap: 4px 22px; flex-wrap: wrap; padding-top: 14px; bor
 .sitetab:hover { color: var(--ink); }
 .sitetab[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
 .sitetab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* Results */
+.banner { margin: 18px 0 4px; padding: 14px 16px; border-radius: 10px; background: var(--accent); color: var(--on-accent); text-align: center; font-family: var(--font-display); font-weight: 800; font-size: clamp(20px, 3.6vw, 30px); letter-spacing: .05em; text-transform: uppercase; line-height: 1.15; }
+.banner small { display: block; margin-top: 4px; font-family: var(--font-body); font-size: 14px; font-weight: 600; letter-spacing: 0; text-transform: none; }
+.rhead { display: grid; gap: 4px; margin: 4px 0 14px; }
+.rhead h2 { margin: 0; font-family: var(--font-display); font-size: 24px; font-weight: 800; }
+.rhead h2 .suit { margin-right: 8px; }
+.rhead p { margin: 0; color: var(--muted); max-width: 75ch; }
+.rsec { margin-top: 26px; display: grid; gap: 12px; }
+.rsec > h3 { margin: 0; font-family: var(--font-display); font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+.rsec > h3 .ico { width: 18px; height: 18px; color: var(--c); }
+.champs { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.champ { background: color-mix(in srgb, var(--c) var(--shade-camp), var(--surface)); box-shadow: inset 4px 0 0 var(--c); border-radius: 10px; padding: 12px 14px 12px 18px; display: grid; gap: 2px; min-width: 0; }
+.champ .k { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c); display: flex; align-items: center; gap: 6px; }
+.champ .k .ico { width: 15px; height: 15px; }
+.champ b { font-family: var(--font-display); font-size: 20px; }
+.champ span { color: var(--muted); font-size: 13px; }
+.kocols { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 18px 22px; align-items: start; }
+.kocol { display: grid; gap: 14px; min-width: 0; }
+.kocol > h4 { margin: 0; font-family: var(--font-display); font-size: 15px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+.stage { display: grid; gap: 8px; min-width: 0; }
+.stage h5 { margin: 0; font-size: 14px; font-weight: 700; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.stage h5 small { font-weight: 400; color: var(--muted); }
+.stage .note { margin: 0; font-size: 12px; color: var(--muted); }
+.match { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow-x: auto; box-shadow: inset 4px 0 0 var(--c); }
+table.m { border-collapse: collapse; width: 100%; font-size: 13px; }
+table.m th, table.m td { padding: 5px 8px; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.m th { font-size: 11px; font-weight: 600; color: var(--muted); border-bottom: 1px solid var(--line); }
+table.m th:first-child, table.m td:first-child { text-align: left; padding-left: 14px; width: 100%; }
+table.m td.tot, table.m th.tot { font-weight: 700; border-left: 1px solid var(--line); }
+table.m tr.win td { font-weight: 700; background: color-mix(in srgb, var(--c) var(--shade-play), var(--surface)); }
+table.m tr.win td:first-child::after { content: " ✓"; color: var(--c); }
+.tblwrap { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; }
+table.st { border-collapse: collapse; width: 100%; font-size: 13px; }
+table.st th, table.st td { padding: 7px 10px; border-bottom: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.st th { font-size: 11.5px; font-weight: 600; color: var(--muted); background: var(--surface); }
+table.st th.l, table.st td.l { text-align: left; }
+table.st td.l.wrap { white-space: normal; min-width: 220px; color: var(--muted); }
+table.st td.tot, table.st th.tot { font-weight: 700; }
+table.st tr:last-child td { border-bottom: none; }
+table.st tr.q td { background: color-mix(in srgb, var(--c) var(--shade-play), var(--surface)); }
+table.st td.rk { font-weight: 700; color: var(--c); }
+.qb { display: inline-block; font-size: 10.5px; font-weight: 700; color: var(--c); border: 1px solid var(--c); border-radius: 999px; padding: 0 6px; margin-left: 6px; }
+.rnote { margin: 0; font-size: 12.5px; color: var(--muted); max-width: 90ch; }
 section.pending { margin-top: 24px; padding: 40px 24px; background: var(--surface); border: 1px dashed var(--line); border-radius: 10px; text-align: center; }
 section.pending h2 { margin: 0 0 6px; font-family: var(--font-display); font-size: 22px; }
 section.pending p { margin: 0; color: var(--muted); }
@@ -226,12 +270,19 @@ footer { margin-top: 28px; font-size: 13px; color: var(--muted); }
   <footer>All times Pacific (Santa Clara, CA). Draft schedule, subject to change.</footer>
   </section>
 
+  <section id="page-results" hidden>
+    <div class="banner" role="note">Example using 2024 results<small>These are last year's results, shown to preview this page. They will be replaced with 2026 results during the event.</small></div>
+    <nav class="cats" id="rcats" role="tablist" aria-label="Choose a category"></nav>
+    <div id="rview"></div>
+  </section>
+
   <section id="page-other" class="pending" hidden>
     <h2 id="pending-title"></h2>
     <p>In progress. Check back closer to the event.</p>
   </section>
 </div>
 
+<script src="results-data.js"></script>
 <script>
 const EVENTS = {
   u26:  { name: "U26 Open", sub: "Teams", suit: "♠" },
@@ -290,9 +341,9 @@ const camp = (ev, end = "18:00") => [
 ];
 // U16 Challenger: session blocks (format depends on sign-ups), everything ends by 5:30pm
 const chalPlay = (label) => [
-  { ev: "chal", s: "10:00", e: "13:30", k: "ko", t: label, n: "Session 1 · format TBD" },
-  { ev: "chal", s: "13:30", e: "15:00", k: "meal", t: "Lunch" },
-  { ev: "chal", s: "15:00", e: "17:30", k: "ko", t: label, n: "Session 2 · format TBD" },
+  { ev: "chal", s: "10:00", e: "13:15", k: "ko", t: label, n: "Session 1 · format TBD" },
+  { ev: "chal", s: "13:15", e: "14:30", k: "meal", t: "Lunch" },
+  { ev: "chal", s: "14:30", e: "17:30", k: "ko", t: label, n: "Session 2 · format TBD" },
   { ev: "chal", s: "18:00", e: "20:00", k: "meal", t: "Dinner" },
 ];
 // Numbered play: slots, label prefix, first number, boards each, first board, meals
@@ -317,10 +368,10 @@ const U21_MEALS = [["13:00","14:30","Lunch"],["18:35","20:00","Dinner"]];
 const KO = [["10:00","11:45"],["12:00","13:45"],["15:15","17:00"],["17:15","19:00"]];
 const KO_MEALS = [["13:45","15:15","Lunch"],["19:00","20:00","Dinner"]];
 const ko = (ev) => play(ev, KO, "Segment", 1, 15, 1, KO_MEALS);
-// Pairs days (U26 Women and U16 share one schedule): 8-board rounds of 55 min, 10-min changes,
-// 3 rounds in the morning, lunch 1:05–2:30, 4 rounds in the afternoon
-const W_ROUNDS = [...seq("10:00", 55, 10, 3), ...seq("14:30", 55, 10, 4)];
-const W_MEALS = [["13:05","14:30","Lunch"],["18:40","20:00","Dinner"]];
+// Pairs days (U26 Women and U16 share one schedule): 8-board rounds of 55 min, 15-min breaks,
+// 3 rounds in the morning, lunch 1:15–2:30 (same as the Challenger), 4 rounds in the afternoon
+const W_ROUNDS = [...seq("10:00", 55, 15, 3), ...seq("14:30", 55, 15, 4)];
+const W_MEALS = [["13:15","14:30","Lunch"],["18:55","20:00","Dinner"]];
 const U16_ROUNDS = W_ROUNDS;
 const U16_MEALS = W_MEALS;
 
@@ -416,26 +467,97 @@ const store = { get(k) { try { return localStorage.getItem(k); } catch { return 
 const ids = ["overview", ...ORDER];
 const PAGES = [
   { id: "schedule", name: "Schedule", ic: "cal" },
-  { id: "u26w-results", name: "U26 Women Results", ev: "u26w" },
-  { id: "u16-results", name: "U16 Open Results", ev: "u16" },
+  { id: "results", name: "Results", ic: "trophy" },
   { id: "hotel", name: "Hotel Info", ic: "hotel" },
 ];
 const fromHash = location.hash.slice(1), saved = store.get("sajusbc-cat");
 let current = ids.includes(fromHash) ? fromHash : ids.includes(saved) ? saved : "overview";
-let page = PAGES.some((p) => p.id === fromHash) ? fromHash : "schedule";
+let page = PAGES.some((p) => p.id === fromHash) ? fromHash : /^results-/.test(fromHash) ? "results" : "schedule";
+let rsub = ORDER.includes(fromHash.replace(/^results-/, "")) ? fromHash.replace(/^results-/, "") : (ORDER.includes(store.get("sajusbc-rsub")) ? store.get("sajusbc-rsub") : "u26");
 
 function renderSite() {
   const el = document.getElementById("site");
   el.innerHTML = PAGES.map((p) => `<button class="sitetab" id="site-${p.id}" data-id="${p.id}"${p.id === page ? ' aria-current="page"' : ""}${p.ev ? ` style="--c:${color(p.ev)}"` : ""}>${p.ev ? suit(p.ev) : icon(p.ic)}${p.name}</button>`).join("");
   el.querySelectorAll(".sitetab").forEach((b) => b.addEventListener("click", () => {
     page = b.dataset.id;
-    try { history.replaceState(null, "", "#" + (page === "schedule" ? current : page)); } catch {}
+    try { history.replaceState(null, "", "#" + (page === "schedule" ? current : page === "results" ? "results-" + rsub : page)); } catch {}
     renderSite();
   }));
   document.getElementById("page-schedule").hidden = page !== "schedule";
+  document.getElementById("page-results").hidden = page !== "results";
   const other = document.getElementById("page-other");
-  other.hidden = page === "schedule";
-  if (page !== "schedule") document.getElementById("pending-title").textContent = PAGES.find((p) => p.id === page).name;
+  other.hidden = page !== "hotel";
+  if (page === "hotel") document.getElementById("pending-title").textContent = "Hotel Info";
+  if (page === "results") renderResults();
+}
+
+// ---------- Results ----------
+const fmtN = (v) => v === null || v === undefined ? "" : typeof v === "number" ? (Number.isInteger(v) ? String(v) : v.toFixed(2)) : esc(v);
+function renderResults() {
+  const el = document.getElementById("rcats");
+  el.innerHTML = ORDER.map((id) => `<button class="tab" role="tab" id="rtab-${id}" aria-selected="${id === rsub}" data-id="${id}" style="--c:${color(id)}"><i aria-hidden="true">${EVENTS[id].suit}\uFE0E</i><b>${EVENTS[id].name}</b><span>${EVENTS[id].sub}</span></button>`).join("");
+  el.querySelectorAll(".tab").forEach((b) => b.addEventListener("click", () => {
+    rsub = b.dataset.id; store.set("sajusbc-rsub", rsub);
+    try { history.replaceState(null, "", "#results-" + rsub); } catch {}
+    renderResults();
+  }));
+  const R = window.RESULTS || {};
+  const v = document.getElementById("rview");
+  v.style.setProperty("--c", color(rsub));
+  if (rsub === "chal" || !R[rsub]) {
+    v.innerHTML = `<section class="pending"><h2>${EVENTS[rsub].name}</h2><p>In progress. Check back closer to the event.</p></section>`;
+  } else {
+    v.innerHTML = EVENTS[rsub].sub === "Teams" ? teamsResults(rsub, R[rsub], (R.team_rosters || {})[rsub] || {}) : pairsResults(rsub, R[rsub]);
+  }
+}
+function matchCard(m) {
+  const n = m.segments.length;
+  const head = m.segments.map((_, i) => `<th>Set ${i + 1}</th>`).join("");
+  const row = (team, side, total) => `<tr class="${m.winner === team ? "win" : ""}"><td>${esc(team)}</td>${m.segments.map((sg) => `<td>${fmtN(sg[side])}</td>`).join("")}<td class="tot">${fmtN(total)}</td></tr>`;
+  return `<div class="match"><table class="m"><thead><tr><th>Team</th>${head}<th class="tot">Total</th></tr></thead><tbody>${row(m.teamA, 0, m.totalA)}${row(m.teamB, 1, m.totalB)}</tbody></table></div>`;
+}
+function stageBlock(st) {
+  const two = st.stage.replace(/^USA[12] /, "").replace("Semifinal", "SF").replace("Quarterfinal", "QF");
+  return `<div class="stage"><h5>${esc(two)}<small>${st.boards} boards</small></h5>${st.matches.map(matchCard).join("")}${(st.notes || []).length ? `<p class="note">${st.notes.map(esc).join(" · ")}</p>` : ""}</div>`;
+}
+function rrTable(rr, roster, title) {
+  const carry = rr.columns.includes("carryover_vp_from_rr1");
+  const ci = (k) => rr.columns.indexOf(k);
+  return `<div class="tblwrap"><table class="st"><thead><tr><th>Rank</th><th class="l">Team</th><th class="l">Players</th>${carry ? "<th>Carryover</th>" : ""}<th class="tot">VPs</th></tr></thead><tbody>${
+    rr.rows.map((r) => `<tr><td class="rk">${r[ci("rank")]}</td><td class="l"><b>${esc(r[ci("team")])}</b></td><td class="l wrap">${esc((roster[r[ci("team")]] || []).join(", "))}</td>${carry ? `<td>${fmtN(r[ci("carryover_vp_from_rr1")])}</td>` : ""}<td class="tot">${fmtN(r[ci("total_vp")])}</td></tr>`).join("")
+  }</tbody></table></div>`;
+}
+function teamsResults(ev, d, roster) {
+  const final = (pfx) => [...d.ko].reverse().find((k) => k.stage.startsWith(pfx + " Final"));
+  const champ = (pfx) => { const f = final(pfx); if (!f) return ""; const w = f.matches[0].winner; return `<div class="champ"><span class="k">${icon("trophy")}${pfx} winner</span><b>Team ${esc(w)}</b><span>${esc((roster[w] || []).join(", "))}</span></div>`; };
+  const col = (pfx) => `<div class="kocol"><h4>${pfx}</h4>${d.ko.filter((k) => k.stage.startsWith(pfx)).map(stageBlock).join("")}</div>`;
+  const rr2 = d.rr.rr2;
+  return `<div class="rhead"><h2>${suit(ev)}${EVENTS[ev].name} Teams</h2><p>Knockouts are scored in IMPs; round robins in VPs (20-VP scale). Totals include any penalties.</p></div>
+    <div class="champs">${champ("USA1")}${champ("USA2")}</div>
+    <section class="rsec"><h3>${icon("trophy")}Knockouts</h3><div class="kocols">${col("USA1")}${col("USA2")}</div></section>
+    <section class="rsec"><h3>${icon("match")}Round robin${rr2 ? " (final standings)" : ""}</h3>${rrTable(rr2 || d.rr, roster)}<p class="rnote">${esc((rr2 || d.rr).note || "")}</p></section>
+    ${rr2 ? `<section class="rsec"><h3>${icon("match")}Round robin 1</h3>${rrTable(d.rr, roster)}<p class="rnote">${esc(d.rr.note || "")}</p></section>` : ""}`;
+}
+function pairsResults(ev, d) {
+  const [s1, s2] = d.stages;
+  const idx = (st, k) => st.columns.indexOf(k);
+  const rounds = (st) => st.columns.filter((c) => /^round_\d+$/.test(c));
+  const pair = (st, r) => `${esc(r[idx(st, "player_NE")])} &amp; ${esc(r[idx(st, "player_SW")])}`;
+  const totKey = (st) => st.columns.includes("total") ? "total" : "total_vps";
+  const sorted = (st) => [...st.rows].sort((a, b) => a[idx(st, "rank")] - b[idx(st, "rank")]);
+  const top = sorted(s2).slice(0, 3);
+  const place = ["1st", "2nd", "3rd"];
+  const podium = `<div class="champs">${top.map((r, i) => `<div class="champ"><span class="k">${icon("trophy")}${place[i]} place</span><b>${pair(s2, r)}</b><span>${fmtN(r[idx(s2, totKey(s2))])} VPs</span></div>`).join("")}</div>`;
+  const table = (st, isFinal) => {
+    const rs = rounds(st), hasCarry = st.columns.includes("carryover");
+    return `<div class="tblwrap"><table class="st"><thead><tr><th>Rank</th><th class="l">Pair</th>${hasCarry ? "<th>Carryover</th>" : ""}${rs.map((c) => `<th>R${c.split("_")[1]}</th>`).join("")}<th class="tot">Total</th></tr></thead><tbody>${
+      sorted(st).map((r) => `<tr class="${!isFinal && r[idx(st, "qualified")] ? "q" : isFinal && r[idx(st, "rank")] <= 3 ? "q" : ""}"><td class="rk">${r[idx(st, "rank")]}</td><td class="l">${pair(st, r)}${!isFinal && r[idx(st, "qualified")] ? '<span class="qb">Q</span>' : ""}</td>${hasCarry ? `<td>${fmtN(r[idx(st, "carryover")])}</td>` : ""}${rs.map((c) => `<td>${fmtN(r[idx(st, c)])}</td>`).join("")}<td class="tot">${fmtN(r[idx(st, totKey(st))])}</td></tr>`).join("")
+    }</tbody></table></div>`;
+  };
+  return `<div class="rhead"><h2>${suit(ev)}${EVENTS[ev].name} Pairs</h2><p>Scored in VPs (20-VP scale). The final includes carryover VPs from the qualifier.</p></div>
+    ${podium}
+    <section class="rsec"><h3>${icon("trophy")}Final</h3>${table(s2, true)}</section>
+    <section class="rsec"><h3>${icon("match")}Qualifier</h3>${table(s1, false)}<p class="rnote">Q = qualified for the final.</p></section>`;
 }
 
 function renderTabs() {
