@@ -621,12 +621,13 @@ function bracket(pfx, d, roster) {
   const short = (st) => st.replace(/^USA[12] /, "").replace("Semifinal", "SF").replace("Quarterfinal", "QF");
   const inUSA1 = new Set(d.ko.filter((k) => k.stage.startsWith("USA1")).flatMap((k) => k.matches.flatMap((x) => [x.teamA, x.teamB])));
   // Footnotes: each stage note is numbered and marked on the total of the team it names
-  const foot = [], mark = {};
+  const foot = [], mark = {}, base = FOOT_N;
   stages.forEach((st, i) => (st.notes || []).forEach((n) => {
     const t = st.matches.flatMap((x) => [x.teamA, x.teamB]).find((t) => new RegExp(`\\b${t}\\b`).test(n));
     foot.push(`${short(st.stage)}: ${n}`);
-    if (t) (mark[`${i}|${t}`] ||= []).push(foot.length);
+    if (t) (mark[`${i}|${t}`] ||= []).push(base + foot.length);
   }));
+  FOOT_N += foot.length;
   const sup = (i, t) => (mark[`${i}|${t}`] || []).map((k) => `<sup>${k}</sup>`).join("");
   const card = (m, i) => {
     // USA2 teams that came down from the USA1 bracket (not winners of the previous USA2 round)
@@ -639,7 +640,7 @@ function bracket(pfx, d, roster) {
   // 4-round brackets (U26 USA2) read as two lines: rounds 1–2, then 3–4
   const lines = stages.length > 3 ? [[0, 1], [2, 3]] : [stages.map((_, i) => i)];
   const links = stages.map((st) => (st.links || []).length ? `<div class="links"><b>${esc(short(st.stage))}</b>${linkChips(st.links).replace(/^<div class="links">|<\/div>$/g, "")}</div>` : "").join("");
-  return `<section class="rsec"><h3>${icon("trophy")}${pfx} bracket</h3>${lines.map((ix) => `<div class="bracket">${ix.map((i) => col(stages[i], i)).join("")}</div>`).join("")}${foot.length ? `<div class="bnotes">${foot.map((n, k) => `<span><sup>${k + 1}</sup> ${esc(n)}</span>`).join("")}</div>` : ""}${links}</section>`;
+  return `<section class="rsec"><h3>${icon("trophy")}${pfx} bracket</h3>${lines.map((ix) => `<div class="bracket">${ix.map((i) => col(stages[i], i)).join("")}</div>`).join("")}${foot.length ? `<div class="bnotes">${foot.map((n, k) => `<span><sup>${base + k + 1}</sup> ${esc(n)}</span>`).join("")}</div>` : ""}${links}</section>`;
 }
 // Brackets: drop the connector line on the last column of each wrapped line
 function markBracketWraps() {
@@ -660,7 +661,9 @@ document.addEventListener("click", (e) => {
     t.querySelectorAll(`[data-col="${i}"]`).forEach((el) => el.classList.add("hlc"));
   }
 });
+let FOOT_N = 0; // footnote numbers run through the whole page
 function teamsResults(ev, d, roster) {
+  FOOT_N = 0;
   const rr2 = d.rr.rr2;
   const final = (pfx) => [...d.ko].reverse().find((k) => k.stage.startsWith(pfx + " Final"));
   const champ = (pfx) => { const f = final(pfx); if (!f) return ""; const w = f.matches[0].winner; return `<div class="champ"><span class="k">${icon("trophy")}${pfx} winner</span><b>Team ${tm(w, roster)}</b><span>${esc(playersFor(w, roster))}</span></div>`; };
