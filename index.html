@@ -115,7 +115,10 @@ nav.site { display: flex; gap: 4px 22px; flex-wrap: wrap; padding-top: 14px; bor
 .bm tbody tr:last-child td:first-child { border-bottom-left-radius: 4px; }
 .bm tbody tr:last-child td:last-child { border-bottom-right-radius: 7px; }
 .bm .from { margin-left: 6px; font-size: 10px; font-weight: 600; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 5px; }
-.bcol:not(.wrapend) .bm::after { content: ""; position: absolute; top: 50%; right: -36px; width: 34px; border-top: 1.5px solid var(--line); }
+.rsec.brk { position: relative; }
+svg.arrows { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 2; }
+svg.arrows path.a { fill: none; stroke: var(--c); stroke-width: 1.75; stroke-linecap: round; opacity: .75; }
+svg.arrows path.h { fill: var(--c); opacity: .75; }
 .bwin { background: color-mix(in srgb, var(--c) var(--shade-camp), var(--surface)); border-left: 4px solid var(--c); border-radius: 8px; padding: 10px 14px 10px 12px; display: grid; gap: 2px; }
 .bwin .k { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c); display: flex; gap: 6px; align-items: center; }
 .bwin .k .ico { width: 14px; height: 14px; }
@@ -569,6 +572,8 @@ function renderResults() {
     CAPTAINS = (R.captains || {})[rsub] || {};
     v.innerHTML = EVENTS[rsub].sub === "Teams" ? teamsResults(rsub, R[rsub], (R.team_rosters || {})[rsub] || {}) : pairsResults(rsub, R[rsub]);
     markBracketWraps();
+    requestAnimationFrame(drawBracketArrows);
+    document.fonts?.ready.then(drawBracketArrows);
   }
 }
 function rrTable(rr, roster, title) {
@@ -632,14 +637,14 @@ function bracket(pfx, d, roster) {
     // USA2 teams that came down from the USA1 bracket (not winners of the previous USA2 round)
     const prev = i > 0 ? stages[i - 1].matches.map((x) => x.winner) : [];
     const from = (t) => pfx === "USA2" && inUSA1.has(t) && !prev.includes(t) ? `<span class="from">from USA1</span>` : "";
-    const row = (t, side, tot) => `<tr class="${m.winner === t ? "win" : ""}"><td>${tm(t, roster)}${from(t)}</td>${m.segments.map((g) => `<td>${g[side] === null ? "–" : fmtN(g[side])}</td>`).join("")}<td class="tot">${fmtN(tot)}${sup(i, t)}</td></tr>`;
+    const row = (t, side, tot) => `<tr class="${m.winner === t ? "win" : ""}" data-team="${esc(t)}"><td>${tm(t, roster)}${from(t)}</td>${m.segments.map((g) => `<td>${g[side] === null ? "–" : fmtN(g[side])}</td>`).join("")}<td class="tot">${fmtN(tot)}${sup(i, t)}</td></tr>`;
     return `<div class="bm" style="--n:${m.segments.length}"><table><colgroup><col class="tc">${m.segments.map(() => '<col class="sc">').join("")}<col class="totc"></colgroup><thead><tr><th></th>${m.segments.map((_, k) => `<th>${k + 1}</th>`).join("")}<th class="tot">Total</th></tr></thead><tbody>${row(m.teamA, 0, m.totalA)}${row(m.teamB, 1, m.totalB)}</tbody></table></div>`;
   };
-  const col = (st, i) => `<div class="bcol"><h5>${esc(short(st.stage))}<small>${st.boards} boards · sets of ${st.boards / st.matches[0].segments.length}</small></h5><div class="bstack">${st.matches.map((m) => card(m, i)).join("")}</div></div>`;
+  const col = (st, i) => `<div class="bcol" data-i="${i}"><h5>${esc(short(st.stage))}<small>${st.boards} boards · sets of ${st.boards / st.matches[0].segments.length}</small></h5><div class="bstack">${st.matches.map((m) => card(m, i)).join("")}</div></div>`;
   // 4-round brackets (U26 USA2) read as two lines: rounds 1–2, then 3–4
   const lines = stages.length > 3 ? [[0, 1], [2, 3]] : [stages.map((_, i) => i)];
   const links = stages.map((st) => (st.links || []).length ? `<div class="links"><b>${esc(short(st.stage))}</b>${linkChips(st.links).replace(/^<div class="links">|<\/div>$/g, "")}</div>` : "").join("");
-  return `<section class="rsec"><h3>${icon("trophy")}${pfx} bracket</h3>${lines.map((ix) => `<div class="bracket">${ix.map((i) => col(stages[i], i)).join("")}</div>`).join("")}${foot.length ? `<div class="bnotes">${foot.map((n, k) => `<span><sup>${base + k + 1}</sup> ${esc(n)}</span>`).join("")}</div>` : ""}${links}</section>`;
+  return `<section class="rsec brk"><svg class="arrows" aria-hidden="true"></svg><h3>${icon("trophy")}${pfx} bracket</h3>${lines.map((ix) => `<div class="bracket">${ix.map((i) => col(stages[i], i)).join("")}</div>`).join("")}${foot.length ? `<div class="bnotes">${foot.map((n, k) => `<span><sup>${base + k + 1}</sup> ${esc(n)}</span>`).join("")}</div>` : ""}${links}</section>`;
 }
 // Brackets: drop the connector line on the last column of each wrapped line
 function markBracketWraps() {
@@ -648,7 +653,28 @@ function markBracketWraps() {
     cols.forEach((c, i) => c.classList.toggle("wrapend", i === cols.length - 1 || cols[i + 1].offsetTop !== c.offsetTop));
   });
 }
-addEventListener("resize", markBracketWraps);
+// Curved arrows from each winner to where that team plays next in the same bracket
+function drawBracketArrows() {
+  document.querySelectorAll(".rsec.brk").forEach((sec) => {
+    const svg = sec.querySelector("svg.arrows"), box = sec.getBoundingClientRect();
+    const cols = [...sec.querySelectorAll(".bcol")].sort((a, b) => a.dataset.i - b.dataset.i);
+    let out = "";
+    cols.slice(1).forEach((col, k) => {
+      const prev = cols[k];
+      col.querySelectorAll("tr[data-team]").forEach((tr) => {
+        const from = [...prev.querySelectorAll("tr.win[data-team]")].find((r) => r.dataset.team === tr.dataset.team);
+        if (!from) return;
+        const a = from.closest(".bm").getBoundingClientRect(), fr = from.getBoundingClientRect(), b = tr.getBoundingClientRect();
+        const x1 = a.right - box.left + 3, y1 = fr.top + fr.height / 2 - box.top;
+        const x2 = b.left - box.left - 9, y2 = b.top + b.height / 2 - box.top;
+        const dx = Math.max(28, Math.abs(x2 - x1) / 2);
+        out += `<path class="a" d="M${x1},${y1} C${x1 + dx},${y1} ${x2 - dx},${y2} ${x2},${y2}"/><path class="h" d="M${x2 + 7},${y2} l-8,-4.5 v9 z"/>`;
+      });
+    });
+    svg.innerHTML = out;
+  });
+}
+addEventListener("resize", () => { markBracketWraps(); drawBracketArrows(); });
 // Cross table: click a team to highlight its row and column
 document.addEventListener("click", (e) => {
   const td = e.target.closest("table.x tbody td");
