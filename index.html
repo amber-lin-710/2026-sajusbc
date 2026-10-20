@@ -136,6 +136,8 @@ svg.arrows path.h { fill: var(--rule); opacity: .5; }
 table.x { border-collapse: collapse; font-size: 13px; }
 table.x th, table.x td { padding: 5px 8px; border: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; width: 64px; min-width: 64px; max-width: 64px; }
 table.x thead th { font-size: 12px; font-weight: 700; color: var(--ink); background: var(--head); border-bottom: 3px solid var(--rule); }
+table.x thead th:not(.l) { text-align: center; }
+table.x tbody td { vertical-align: top; }
 table.x tbody tr:nth-child(even) td { background: var(--zebra); }
 table.x tbody tr.gs td { border-top: 3px solid var(--rule); }
 table.x th.l, table.x td.l { text-align: left; width: auto; min-width: 170px; max-width: none; }
