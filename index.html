@@ -88,37 +88,50 @@ nav.site { display: flex; gap: 4px 22px; flex-wrap: wrap; padding-top: 14px; bor
 .champ .k .ico { width: 15px; height: 15px; }
 .champ b { font-family: var(--font-display); font-size: 20px; }
 .champ span { color: var(--muted); font-size: 13px; }
-/* Brackets: columns = rounds, left to right; matches centered in each column */
-.bracket { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(200px, 1fr); gap: 0 30px; overflow-x: auto; padding: 4px 2px 10px; }
-.bcol { display: grid; grid-template-rows: auto 1fr; gap: 8px; min-width: 0; }
-.bcol > h5 { margin: 0; font-size: 13px; font-weight: 700; display: flex; gap: 8px; align-items: baseline; }
+/* Brackets: one column per round, left to right; wraps to a new line when space runs out */
+.bracket { display: flex; flex-wrap: wrap; gap: 18px 34px; align-items: stretch; padding: 2px 0 4px; }
+.bcol { display: grid; grid-template-rows: auto 1fr; gap: 8px; min-width: 0; flex: 0 1 auto; }
+.bcol > h5 { margin: 0; font-size: 13px; font-weight: 700; display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; }
 .bcol > h5 small { font-weight: 400; color: var(--muted); }
 .bstack { display: flex; flex-direction: column; justify-content: space-around; gap: 16px; }
-.bm { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: inset 4px 0 0 var(--c); }
-.bcol:not(:last-child) .bm::after { content: ""; position: absolute; top: 50%; right: -31px; width: 30px; border-top: 1.5px solid var(--line); }
-.bm .row { display: flex; align-items: center; gap: 8px; padding: 6px 10px 6px 14px; font-size: 13.5px; }
-.bm .row + .row { border-top: 1px solid var(--line); }
-.bm .row .t { flex: 1; min-width: 0; }
-.bm .row .n { font-variant-numeric: tabular-nums; font-weight: 600; }
-.bm .row.win { font-weight: 700; background: color-mix(in srgb, var(--c) var(--shade-play), var(--surface)); }
-.bm .row.win .n { color: var(--c); }
-.bm .from { font-size: 10.5px; font-weight: 600; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; white-space: nowrap; }
-.bm .sets { padding: 4px 10px 6px 14px; font-size: 11.5px; color: var(--muted); border-top: 1px dashed var(--line); font-variant-numeric: tabular-nums; }
-.bwin { background: color-mix(in srgb, var(--c) var(--shade-camp), var(--surface)); box-shadow: inset 4px 0 0 var(--c); border-radius: 8px; padding: 10px 12px 10px 16px; display: grid; gap: 2px; }
+.bm { position: relative; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--c); border-radius: 8px; }
+.bm table { border-collapse: separate; border-spacing: 0; font-size: 13px; width: 100%; }
+.bm th, .bm td { padding: 5px 7px; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bm th { font-size: 10.5px; font-weight: 600; color: var(--muted); padding-block: 4px 3px; border-bottom: 1px solid var(--line); }
+.bm th:first-child, .bm td:first-child { text-align: left; padding-left: 10px; }
+.bm td.tot, .bm th.tot { font-weight: 700; border-left: 1px solid var(--line); padding-right: 10px; }
+.bm tr + tr td { border-top: 1px solid var(--line); }
+.bm tr.win td { font-weight: 700; background: color-mix(in srgb, var(--c) var(--shade-play), var(--surface)); }
+.bm tr.win td.tot { color: var(--c); }
+.bm tbody tr:last-child td:first-child { border-bottom-left-radius: 4px; }
+.bm tbody tr:last-child td:last-child { border-bottom-right-radius: 7px; }
+.bm .from { margin-left: 6px; font-size: 10px; font-weight: 600; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 5px; }
+.bcol:not(.wrapend) .bm::after { content: ""; position: absolute; top: 50%; right: -36px; width: 34px; border-top: 1.5px solid var(--line); }
+.bwin { background: color-mix(in srgb, var(--c) var(--shade-camp), var(--surface)); border-left: 4px solid var(--c); border-radius: 8px; padding: 10px 14px 10px 12px; display: grid; gap: 2px; }
 .bwin .k { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c); display: flex; gap: 6px; align-items: center; }
 .bwin .k .ico { width: 14px; height: 14px; }
 .bwin b { font-family: var(--font-display); font-size: 18px; }
 .bnotes { margin: 0; font-size: 12px; color: var(--muted); }
-/* Round-robin cross table */
-table.x { border-collapse: collapse; font-size: 13px; width: 100%; }
-table.x th, table.x td { padding: 6px 8px; border-bottom: 1px solid var(--line); border-left: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-table.x th { font-size: 11.5px; font-weight: 600; color: var(--muted); vertical-align: bottom; }
-table.x th.l, table.x td.l { text-align: left; border-left: none; }
+.links { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12px; }
+.links a { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); text-decoration: none; font-weight: 600; }
+.links a:hover { border-color: var(--c); color: var(--c); }
+.links a .ico { width: 12px; height: 12px; }
+/* Round-robin cross table (like the USBF results sheet): click a team to highlight its row and column */
+table.x { border-collapse: collapse; font-size: 13px; }
+table.x th, table.x td { padding: 5px 8px; border: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.x thead th { font-size: 12px; font-weight: 700; color: var(--muted); text-align: center; }
+table.x th.l, table.x td.l { text-align: left; }
+table.x td.team { cursor: pointer; font-weight: 700; }
+table.x td.team .no { color: var(--muted); font-weight: 600; margin-right: 6px; }
 table.x td.self { background: var(--meal); }
-table.x td small { display: block; font-size: 10.5px; color: var(--muted); }
-table.x td.tot, table.x th.tot { font-weight: 700; color: var(--ink); background: color-mix(in srgb, var(--c) var(--shade-play), var(--surface)); }
-table.x td.rk { font-weight: 700; color: var(--c); border-left: none; }
-table.x tr:last-child td { border-bottom: none; }
+table.x td small { display: block; font-size: 10px; color: var(--muted); }
+table.x td.tot { font-weight: 800; }
+table.x td.tot.q1 { color: var(--accent); }
+table.x td.tot.q2 { color: var(--ev-u21); }
+table.x tr.hl td, table.x td.hlc { background: color-mix(in srgb, var(--c) 22%, var(--surface)); }
+table.x tr.hl td.self { background: color-mix(in srgb, var(--c) 34%, var(--surface)); }
+.xkey { margin: 0; font-size: 12.5px; color: var(--muted); }
+.xkey b.q1 { color: var(--accent); } .xkey b.q2 { color: var(--ev-u21); }
 /* Instant player popover (positioned by script so scroll containers don't clip it) */
 .tm { cursor: help; text-decoration: underline dotted color-mix(in srgb, currentColor 45%, transparent); text-underline-offset: 3px; }
 .tm:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
@@ -304,7 +317,7 @@ footer { margin-top: 28px; font-size: 13px; color: var(--muted); }
   </section>
 </div>
 
-<script src="results-data.js"></script>
+<script src="results-data.js?v=a98c131d"></script>
 <script>
 const EVENTS = {
   u26:  { name: "U26 Open", sub: "Teams", suit: "♠" },
@@ -330,6 +343,7 @@ const PATHS = {
   hotel:  "M4 21V3h12v18M16 9h4v12M8 7h4M8 11h4M8 15h4M2 21h20",
   grid:   "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z",
   arrow:  "M5 12h14M13 6l6 6-6 6",
+  doc:    "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M9 13h6M9 17h6",
 };
 const icon = (name) => `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="${PATHS[name]}"/></svg>`;
 function iconFor(it) {
@@ -530,6 +544,7 @@ function renderResults() {
     v.innerHTML = `<section class="pending"><h2>${EVENTS[rsub].name}</h2><p>In progress. Check back closer to the event.</p></section>`;
   } else {
     v.innerHTML = EVENTS[rsub].sub === "Teams" ? teamsResults(rsub, R[rsub], (R.team_rosters || {})[rsub] || {}) : pairsResults(rsub, R[rsub]);
+    markBracketWraps();
   }
 }
 function rrTable(rr, roster, title) {
@@ -541,48 +556,75 @@ function rrTable(rr, roster, title) {
 }
 // Team name with an instant player popover
 const tm = (team, roster) => `<span class="tm" tabindex="0" data-team="${esc(team)}" data-players="${esc((roster[team] || []).join(", "))}">${esc(team)}</span>`;
-function crossTable(rr, roster) {
+const linkChips = (links) => (links || []).length ? `<div class="links">${links.map((l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${icon(l.kind === "lb" ? "match" : "doc")}${esc(l.label)}</a>`).join("")}</div>` : "";
+function crossTable(rr, roster, d) {
   const x = rr.cross;
   if (!x) return rrTable(rr, roster);
   const carry = rr.columns.includes("carryover_vp_from_rr1");
   const ci = (k) => rr.columns.indexOf(k);
   const byTeam = Object.fromEntries(rr.rows.map((r) => [r[ci("team")], r]));
+  const no = (t) => (byTeam[t] || [])[ci("rr_team_no")] ?? "";
+  // Who went on to which knockout (first stage each team appears in)
+  const usa1 = new Set(d.ko.filter((k) => k.stage.startsWith("USA1")).flatMap((k) => k.matches.flatMap((m) => [m.teamA, m.teamB])));
+  const firstUSA2 = d.ko.find((k) => k.stage.startsWith("USA2"));
+  const usa2 = new Set(firstUSA2 ? firstUSA2.matches.flatMap((m) => [m.teamA, m.teamB]).filter((t) => !usa1.has(t)) : []);
+  const q = (t) => usa1.has(t) ? "q1" : usa2.has(t) ? "q2" : "";
   const hasBye = x.bye && Object.keys(x.bye).length;
-  const cell = (a, b) => {
-    if (a === b) return `<td class="self"></td>`;
+  const cell = (a, b, j) => {
+    if (a === b) return `<td class="self" data-col="${j}"></td>`;
     const vp = (x.vp[a] || {})[b], im = ((x.imps || {})[a] || {})[b];
-    if (vp === undefined) return "<td></td>";
-    const vps = [].concat(vp), ims = im === undefined ? [] : Array.isArray(im[0]) ? im : [im];
-    return `<td>${vps.map(fmtN).join("<br>")}${ims.length ? `<small>${ims.map((p) => `${p[0]}–${p[1]}`).join(" · ")}</small>` : ""}</td>`;
+    if (vp === undefined) return `<td data-col="${j}"></td>`;
+    return `<td data-col="${j}" title="${esc(`${a} v ${b}`)}">${fmtN(vp)}${im ? `<small>${im[0]}–${im[1]}</small>` : ""}</td>`;
   };
-  return `<div class="tblwrap"><table class="x"><thead><tr><th class="l">#</th><th class="l">Team</th>${x.teams.map((t) => `<th>${tm(t, roster)}</th>`).join("")}${hasBye ? "<th>Bye</th>" : ""}${carry ? "<th>Carryover</th>" : ""}<th class="tot">Total VPs</th></tr></thead><tbody>${
-    x.teams.map((a) => { const r = byTeam[a] || []; return `<tr><td class="rk">${r[ci("rank")] ?? ""}</td><td class="l"><b>${tm(a, roster)}</b></td>${x.teams.map((b) => cell(a, b)).join("")}${hasBye ? `<td>${fmtN((x.bye || {})[a])}</td>` : ""}${carry ? `<td>${fmtN(r[ci("carryover_vp_from_rr1")])}</td>` : ""}<td class="tot">${fmtN(r[ci("total_vp")])}</td></tr>`; }).join("")
+  const table = `<div class="tblwrap"><table class="x"><thead><tr><th class="l">Team</th><th>Total</th>${carry ? "<th>Carry</th>" : ""}${x.teams.map((t, j) => `<th data-col="${j}" title="${esc(t)}">${esc(no(t))}</th>`).join("")}${hasBye ? "<th>Bye</th>" : ""}</tr></thead><tbody>${
+    x.teams.map((a, i) => `<tr data-row="${i}"><td class="l team" data-row="${i}"><span class="no">${esc(no(a))}.</span>${tm(a, roster)}</td><td class="tot ${q(a)}">${fmtN((byTeam[a] || [])[ci("total_vp")])}</td>${carry ? `<td>${fmtN((byTeam[a] || [])[ci("carryover_vp_from_rr1")])}</td>` : ""}${x.teams.map((b, j) => cell(a, b, j)).join("")}${hasBye ? `<td>${fmtN((x.bye || {})[a])}</td>` : ""}</tr>`).join("")
   }</tbody></table></div>`;
+  const key = `<p class="xkey">Teams are listed in finishing order; column numbers are team numbers. Each box shows the row team's VPs with the IMP score underneath. ${usa1.size ? '<b class="q1">Red totals</b> qualified for the USA1 knockout' : ""}${usa2.size ? ', <b class="q2">green totals</b> for USA2' : ""}. Click a team to highlight its row.</p>`;
+  return table + key;
 }
 function bracket(pfx, d, roster) {
   const stages = d.ko.filter((k) => k.stage.startsWith(pfx));
   if (!stages.length) return "";
   const short = (st) => st.replace(/^USA[12] /, "").replace("Semifinal", "SF").replace("Quarterfinal", "QF");
+  const inUSA1 = new Set(d.ko.filter((k) => k.stage.startsWith("USA1")).flatMap((k) => k.matches.flatMap((x) => [x.teamA, x.teamB])));
   const card = (m, i) => {
     // USA2 teams that came down from the USA1 bracket (not winners of the previous USA2 round)
     const prev = i > 0 ? stages[i - 1].matches.map((x) => x.winner) : [];
-    const inUSA1 = new Set(d.ko.filter((k) => k.stage.startsWith("USA1")).flatMap((k) => k.matches.flatMap((x) => [x.teamA, x.teamB])));
     const from = (t) => pfx === "USA2" && inUSA1.has(t) && !prev.includes(t) ? `<span class="from">from USA1</span>` : "";
-    const row = (t, tot) => `<div class="row${m.winner === t ? " win" : ""}"><span class="t">${tm(t, roster)}</span>${from(t)}<span class="n">${fmtN(tot)}</span></div>`;
-    const sets = m.segments.map((g) => g[1] === "w/d" ? "w/d" : `${fmtN(g[0])}–${fmtN(g[1])}`).join(" · ");
-    return `<div class="bm">${row(m.teamA, m.totalA)}${row(m.teamB, m.totalB)}<div class="sets">Sets ${sets}</div></div>`;
+    const row = (t, side, tot) => `<tr class="${m.winner === t ? "win" : ""}"><td>${tm(t, roster)}${from(t)}</td>${m.segments.map((g) => `<td>${g[side] === null ? "–" : fmtN(g[side])}</td>`).join("")}<td class="tot">${fmtN(tot)}</td></tr>`;
+    return `<div class="bm"><table><thead><tr><th></th>${m.segments.map((_, k) => `<th>${k + 1}</th>`).join("")}<th class="tot">Total</th></tr></thead><tbody>${row(m.teamA, 0, m.totalA)}${row(m.teamB, 1, m.totalB)}</tbody></table></div>`;
   };
-  const cols = stages.map((st, i) => `<div class="bcol"><h5>${esc(short(st.stage))}<small>${st.boards} boards</small></h5><div class="bstack">${st.matches.map((m) => card(m, i)).join("")}</div></div>`).join("");
+  const cols = stages.map((st, i) => `<div class="bcol"><h5>${esc(short(st.stage))}<small>${st.boards} boards · sets of ${st.boards / st.matches[0].segments.length}</small></h5><div class="bstack">${st.matches.map((m) => card(m, i)).join("")}</div></div>`).join("");
   const w = stages[stages.length - 1].matches[0].winner;
   const champ = `<div class="bcol"><h5>${pfx} winner</h5><div class="bstack"><div class="bwin"><span class="k">${icon("trophy")}${pfx}</span><b>${tm(w, roster)}</b></div></div></div>`;
   const notes = stages.flatMap((st) => (st.notes || []).map((n) => `${short(st.stage)}: ${n}`));
-  return `<section class="rsec"><h3>${icon("trophy")}${pfx} bracket</h3><div class="bracket">${cols}${champ}</div>${notes.length ? `<p class="bnotes">${notes.map(esc).join(" · ")}</p>` : ""}</section>`;
+  const links = stages.map((st) => (st.links || []).length ? `<div class="links"><b>${esc(short(st.stage))}</b>${linkChips(st.links).replace(/^<div class="links">|<\/div>$/g, "")}</div>` : "").join("");
+  return `<section class="rsec"><h3>${icon("trophy")}${pfx} bracket</h3><div class="bracket">${cols}${champ}</div>${notes.length ? `<p class="bnotes">${notes.map(esc).join(" · ")}</p>` : ""}${links}</section>`;
 }
+// Brackets: drop the connector line on the last column of each wrapped line
+function markBracketWraps() {
+  document.querySelectorAll(".bracket").forEach((b) => {
+    const cols = [...b.children];
+    cols.forEach((c, i) => c.classList.toggle("wrapend", i === cols.length - 1 || cols[i + 1].offsetTop !== c.offsetTop));
+  });
+}
+addEventListener("resize", markBracketWraps);
+// Cross table: click a team to highlight its row and column
+document.addEventListener("click", (e) => {
+  const td = e.target.closest("table.x td.team");
+  if (!td) return;
+  const t = td.closest("table"), i = td.dataset.row, on = !td.parentElement.classList.contains("hl");
+  t.querySelectorAll(".hl, .hlc").forEach((el) => el.classList.remove("hl", "hlc"));
+  if (on) {
+    td.parentElement.classList.add("hl");
+    t.querySelectorAll(`[data-col="${i}"]`).forEach((el) => el.classList.add("hlc"));
+  }
+});
 function teamsResults(ev, d, roster) {
   const rr2 = d.rr.rr2;
   return `<div class="rhead"><h2>${suit(ev)}${EVENTS[ev].name} Teams</h2><p>Round robins are scored in VPs (20-VP scale); knockouts in IMPs. Totals include any penalties. Hover over or tap a team name to see its players.</p></div>
-    <section class="rsec"><h3>${icon("match")}Round robin${rr2 ? " 2 (final standings)" : ""}</h3>${crossTable(rr2 || d.rr, roster)}<p class="rnote">${esc((rr2 || d.rr).note || "")}</p></section>
-    ${rr2 ? `<section class="rsec"><h3>${icon("match")}Round robin 1</h3>${crossTable(d.rr, roster)}<p class="rnote">${esc(d.rr.note || "")}</p></section>` : ""}
+    <section class="rsec"><h3>${icon("match")}Round robin${rr2 ? " 2 (final standings)" : ""}</h3>${crossTable(rr2 || d.rr, roster, d)}${linkChips((rr2 || d.rr).links)}</section>
+    ${rr2 ? `<section class="rsec"><h3>${icon("match")}Round robin 1</h3>${crossTable(d.rr, roster, { ko: [] })}${linkChips(d.rr.links)}</section>` : ""}
     ${bracket("USA1", d, roster)}
     ${bracket("USA2", d, roster)}`;
 }
@@ -622,8 +664,8 @@ function pairsResults(ev, d) {
   };
   return `<div class="rhead"><h2>${suit(ev)}${EVENTS[ev].name} Pairs</h2><p>Scored in VPs (20-VP scale). The final includes carryover VPs from the qualifier.</p></div>
     ${podium}
-    <section class="rsec"><h3>${icon("trophy")}Final</h3>${table(s2, true)}</section>
-    <section class="rsec"><h3>${icon("match")}Qualifier</h3>${table(s1, false)}<p class="rnote">Q = qualified for the final.</p></section>`;
+    <section class="rsec"><h3>${icon("trophy")}Final</h3>${table(s2, true)}${linkChips((d.links || []).filter((l) => l.stage === "Final"))}</section>
+    <section class="rsec"><h3>${icon("match")}Qualifier</h3>${table(s1, false)}<p class="rnote">Q = qualified for the final.</p>${linkChips((d.links || []).filter((l) => l.stage === "Qualifier"))}</section>`;
 }
 
 function renderTabs() {
