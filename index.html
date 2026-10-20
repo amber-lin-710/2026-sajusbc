@@ -663,7 +663,8 @@ function drawBracketArrows() {
       const prev = cols[k];
       col.querySelectorAll("tr[data-team]").forEach((tr) => {
         const from = [...prev.querySelectorAll("tr.win[data-team]")].find((r) => r.dataset.team === tr.dataset.team);
-        if (!from) return;
+        // Only connect rounds on the same line; the line break itself shows the next rounds
+        if (!from || from.closest(".bracket") !== tr.closest(".bracket")) return;
         const a = from.closest(".bm").getBoundingClientRect(), fr = from.getBoundingClientRect(), b = tr.getBoundingClientRect();
         const x1 = a.right - box.left + 3, y1 = fr.top + fr.height / 2 - box.top;
         const x2 = b.left - box.left - 9, y2 = b.top + b.height / 2 - box.top;
