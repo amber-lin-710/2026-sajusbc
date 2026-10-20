@@ -707,7 +707,7 @@ document.addEventListener("click", (e) => {
 function teamsResults(ev, d, roster) {
   const rr2 = d.rr.rr2;
   const final = (pfx) => [...d.ko].reverse().find((k) => k.stage.startsWith(pfx + " Final"));
-  const champ = (pfx) => { const f = final(pfx); if (!f) return ""; const w = f.matches[0].winner; return `<div class="champ"><span class="k">${icon("trophy")}${pfx} winner</span><b>Team ${tm(w, roster)}</b><span>${esc(playersFor(w, roster))}</span></div>`; };
+  const champ = (pfx) => { const f = final(pfx); if (!f) return ""; const w = f.matches[0].winner; return `<div class="champ"><span class="k">${icon("trophy")}${pfx} winner</span><b>Team ${esc(w)}</b><span>${esc(playersFor(w, roster))}</span></div>`; };
   return `<div class="rhead"><h2>${suit(ev)}${EVENTS[ev].name} Teams</h2><p>Round robins are scored in VPs (20-VP scale); knockouts in IMPs. Totals include any penalties. Hover over or tap a team name to see its players.</p></div>
     <div class="champs">${champ("USA1")}${champ("USA2")}</div>
     <section class="rsec"><h3>${icon("match")}Round robin${rr2 ? " 2 (final standings)" : ""}</h3>${crossTable(rr2 || d.rr, roster, d)}${linkChips((rr2 || d.rr).links)}</section>
