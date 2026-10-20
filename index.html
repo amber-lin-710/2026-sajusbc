@@ -94,7 +94,7 @@ nav.site { display: flex; gap: 4px 22px; flex-wrap: wrap; padding-top: 14px; bor
 .champ b { font-family: var(--font-display); font-size: 20px; }
 .champ > span:last-child { color: var(--muted); font-size: 13px; }
 /* Brackets: one column per round, left to right; wraps to a new line when space runs out */
-.bracket { display: flex; flex-wrap: wrap; gap: 18px 34px; align-items: stretch; padding: 2px 0 4px; }
+.bracket { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px 34px; align-items: stretch; padding: 2px 0 4px; }
 .bracket + .bracket { margin-top: 6px; }
 .bcol { display: grid; grid-template-rows: auto 1fr; gap: 8px; min-width: 0; flex: 0 1 auto; }
 .bcol > h5 { margin: 0; font-size: 13px; font-weight: 700; display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; }
@@ -129,25 +129,27 @@ nav.site { display: flex; gap: 4px 22px; flex-wrap: wrap; padding-top: 14px; bor
 .links a .ico { width: 12px; height: 12px; }
 /* Round-robin cross table (like the USBF results sheet): click a team to highlight its row and column */
 table.x { border-collapse: collapse; font-size: 13px; }
-table.x th, table.x td { padding: 5px 8px; border: 1px solid var(--line); text-align: center; font-variant-numeric: tabular-nums; white-space: nowrap; }
-table.x thead th { font-size: 12px; font-weight: 700; color: var(--ink); background: var(--head); }
+table.x th, table.x td { padding: 5px 8px; border: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; width: 64px; min-width: 64px; max-width: 64px; }
+table.x thead th { font-size: 12px; font-weight: 700; color: var(--ink); background: var(--head); border-bottom: 3px solid var(--rule); }
 table.x tbody tr:nth-child(even) td { background: var(--zebra); }
 table.x tbody tr.gs td { border-top: 3px solid var(--rule); }
-table.x th.l, table.x td.l { text-align: center; min-width: 170px; }
+table.x th.l, table.x td.l { text-align: left; width: auto; min-width: 170px; max-width: none; }
+table.x th.rkh, table.x td.rk { width: 40px; min-width: 40px; max-width: 40px; }
+table.x tbody td { cursor: pointer; }
 table.x td.team { cursor: pointer; font-weight: 700; }
-table.x th:not(:first-child), table.x td:not(:first-child) { width: 64px; min-width: 64px; max-width: 64px; }
 .tblwrap:has(table.x) { width: fit-content; max-width: 100%; margin-inline: auto; }
 .xkey { text-align: center; margin-inline: auto; max-width: 90ch; }
 table.x td.team .no { color: var(--muted); font-weight: 600; margin-right: 6px; }
 table.x tbody tr td.self { background: var(--meal); }
 table.x td small { display: block; font-size: 10px; color: var(--muted); }
 table.x td.tot { font-weight: 800; }
-table.x td.tot.q1 { color: var(--accent); }
-table.x td.tot.q2 { color: var(--ev-u21); }
+/* USA1 qualifiers in the category color (U26 blue, U21 green); USA2 qualifiers grey */
+table.x td.tot.q1 { color: var(--c); }
+table.x td.tot.q2 { color: var(--muted); }
 table.x tbody tr.hl td, table.x tbody tr td.hlc, table.x thead th.hlc { background: color-mix(in srgb, var(--c) 22%, var(--surface)); }
 table.x tbody tr.hl td.self { background: color-mix(in srgb, var(--c) 34%, var(--surface)); }
 .xkey { margin: 0; font-size: 12.5px; color: var(--muted); }
-.xkey b.q1 { color: var(--accent); } .xkey b.q2 { color: var(--ev-u21); }
+.xkey b.q1 { color: var(--c); } .xkey b.q2 { color: var(--muted); }
 /* Instant player popover (positioned by script so scroll containers don't clip it) */
 .tm { cursor: help; text-decoration: underline dotted color-mix(in srgb, currentColor 45%, transparent); text-underline-offset: 3px; }
 .tm:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
@@ -585,6 +587,7 @@ const playersFor = (team, roster) => {
 };
 const tm = (team, roster) => `<span class="tm" tabindex="0" data-team="${esc(team)}" data-players="${esc(playersFor(team, roster))}">${esc(team)}</span>`;
 const linkChips = (links) => (links || []).length ? `<div class="links">${links.map((l) => `<a${l.kind === "lb" ? ' class="lb"' : ""} href="${esc(l.url)}" target="_blank" rel="noopener">${icon(l.kind === "lb" ? "match" : "doc")}${esc(l.label)}</a>`).join("")}</div>` : "";
+const f2 = (v) => v === null || v === undefined || v === "" ? "" : Number(v).toFixed(2);
 function crossTable(rr, roster, d) {
   const x = rr.cross;
   if (!x) return rrTable(rr, roster);
@@ -602,12 +605,12 @@ function crossTable(rr, roster, d) {
     if (a === b) return `<td class="self" data-col="${j}"></td>`;
     const vp = (x.vp[a] || {})[b], im = ((x.imps || {})[a] || {})[b];
     if (vp === undefined) return `<td data-col="${j}"></td>`;
-    return `<td data-col="${j}" title="${esc(`${a} v ${b}`)}">${fmtN(vp)}${im ? `<small>${im[0]}–${im[1]}</small>` : ""}</td>`;
+    return `<td data-col="${j}" title="${esc(`${a} v ${b}`)}">${f2(vp)}${im ? `<small>${im[0]}–${im[1]}</small>` : ""}</td>`;
   };
-  const table = `<div class="tblwrap"><table class="x"><thead><tr><th class="l">Team</th><th>Total</th>${carry ? "<th>Carry</th>" : ""}${x.teams.map((t, j) => `<th data-col="${j}" title="${esc(t)}">${esc(no(t))}</th>`).join("")}${hasBye ? "<th>Bye</th>" : ""}</tr></thead><tbody>${
-    x.teams.map((a, i) => `<tr data-row="${i}"${i > 0 && q(a) !== q(x.teams[i - 1]) ? ' class="gs"' : ""}><td class="l team" data-row="${i}"><span class="no">${esc(no(a))}.</span>${tm(a, roster)}</td><td class="tot ${q(a)}">${fmtN((byTeam[a] || [])[ci("total_vp")])}</td>${carry ? `<td>${fmtN((byTeam[a] || [])[ci("carryover_vp_from_rr1")])}</td>` : ""}${x.teams.map((b, j) => cell(a, b, j)).join("")}${hasBye ? `<td>${fmtN((x.bye || {})[a])}</td>` : ""}</tr>`).join("")
+  const table = `<div class="tblwrap"><table class="x"><thead><tr><th class="rkh">Rank</th><th class="l">Team</th><th>Total</th>${carry ? "<th>Carry</th>" : ""}${x.teams.map((t, j) => `<th data-col="${j}" title="${esc(t)}">${esc(no(t))}</th>`).join("")}${hasBye ? "<th>Bye</th>" : ""}</tr></thead><tbody>${
+    x.teams.map((a, i) => `<tr data-row="${i}"${i > 0 && q(a) !== q(x.teams[i - 1]) ? ' class="gs"' : ""}><td class="rk">${(byTeam[a] || [])[ci("rank")] ?? ""}</td><td class="l team" data-row="${i}"><span class="no">${esc(no(a))}.</span>${tm(a, roster)}</td><td class="tot ${q(a)}">${f2((byTeam[a] || [])[ci("total_vp")])}</td>${carry ? `<td>${f2((byTeam[a] || [])[ci("carryover_vp_from_rr1")])}</td>` : ""}${x.teams.map((b, j) => cell(a, b, j)).join("")}${hasBye ? `<td>${f2((x.bye || {})[a])}</td>` : ""}</tr>`).join("")
   }</tbody></table></div>`;
-  const key = `<p class="xkey">Teams are listed in finishing order; column numbers are team numbers. Each box shows the row team's VPs with the IMP score underneath. ${usa1.size ? '<b class="q1">Red totals</b> qualified for the USA1 knockout' : ""}${usa2.size ? ', <b class="q2">green totals</b> for USA2' : ""}. Thick lines separate the qualifiers for each knockout. Click a team to highlight its row.</p>`;
+  const key = `<p class="xkey">Teams are listed in finishing order; column numbers are team numbers. Each box shows the row team's VPs with the IMP score underneath. ${usa1.size ? '<b class="q1">Colored totals</b> qualified for the USA1 knockout' : ""}${usa2.size ? ', <b class="q2">grey totals</b> for USA2' : ""}. Thick lines separate the qualifiers for each knockout. Click anywhere in a row to highlight that team.</p>`;
   return table + key;
 }
 function bracket(pfx, d, roster) {
@@ -639,12 +642,12 @@ function markBracketWraps() {
 addEventListener("resize", markBracketWraps);
 // Cross table: click a team to highlight its row and column
 document.addEventListener("click", (e) => {
-  const td = e.target.closest("table.x td.team");
+  const td = e.target.closest("table.x tbody td");
   if (!td) return;
-  const t = td.closest("table"), i = td.dataset.row, on = !td.parentElement.classList.contains("hl");
+  const tr = td.parentElement, t = td.closest("table"), i = tr.dataset.row, on = !tr.classList.contains("hl");
   t.querySelectorAll(".hl, .hlc").forEach((el) => el.classList.remove("hl", "hlc"));
   if (on) {
-    td.parentElement.classList.add("hl");
+    tr.classList.add("hl");
     t.querySelectorAll(`[data-col="${i}"]`).forEach((el) => el.classList.add("hlc"));
   }
 });
