@@ -122,6 +122,7 @@ table.x th, table.x td { padding: 5px 8px; border: 1px solid var(--line); text-a
 table.x thead th { font-size: 12px; font-weight: 700; color: var(--muted); text-align: center; }
 table.x th.l, table.x td.l { text-align: left; }
 table.x td.team { cursor: pointer; font-weight: 700; }
+table.x th:not(:first-child), table.x td:not(:first-child) { width: 64px; min-width: 64px; max-width: 64px; }
 table.x td.team .no { color: var(--muted); font-weight: 600; margin-right: 6px; }
 table.x td.self { background: var(--meal); }
 table.x td small { display: block; font-size: 10px; color: var(--muted); }
@@ -317,7 +318,7 @@ footer { margin-top: 28px; font-size: 13px; color: var(--muted); }
   </section>
 </div>
 
-<script src="results-data.js?v=a98c131d"></script>
+<script src="results-data.js?v=eccfb881"></script>
 <script>
 const EVENTS = {
   u26:  { name: "U26 Open", sub: "Teams", suit: "♠" },
@@ -543,6 +544,7 @@ function renderResults() {
   if (rsub === "chal" || !R[rsub]) {
     v.innerHTML = `<section class="pending"><h2>${EVENTS[rsub].name}</h2><p>In progress. Check back closer to the event.</p></section>`;
   } else {
+    CAPTAINS = (R.captains || {})[rsub] || {};
     v.innerHTML = EVENTS[rsub].sub === "Teams" ? teamsResults(rsub, R[rsub], (R.team_rosters || {})[rsub] || {}) : pairsResults(rsub, R[rsub]);
     markBracketWraps();
   }
@@ -555,7 +557,15 @@ function rrTable(rr, roster, title) {
   }</tbody></table></div>`;
 }
 // Team name with an instant player popover
-const tm = (team, roster) => `<span class="tm" tabindex="0" data-team="${esc(team)}" data-players="${esc((roster[team] || []).join(", "))}">${esc(team)}</span>`;
+// Captain marked (C), or listed last as (NPC) if non-playing
+let CAPTAINS = {};
+const playersFor = (team, roster) => {
+  const cap = CAPTAINS[team];
+  const list = (roster[team] || []).filter((n) => !/,\s*npc$/i.test(n)).map((n) => cap && !cap.npc && n === cap.name ? `${n} (C)` : n);
+  if (cap && cap.npc) list.push(`${cap.name} (NPC)`);
+  return list.join(", ");
+};
+const tm = (team, roster) => `<span class="tm" tabindex="0" data-team="${esc(team)}" data-players="${esc(playersFor(team, roster))}">${esc(team)}</span>`;
 const linkChips = (links) => (links || []).length ? `<div class="links">${links.map((l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${icon(l.kind === "lb" ? "match" : "doc")}${esc(l.label)}</a>`).join("")}</div>` : "";
 function crossTable(rr, roster, d) {
   const x = rr.cross;
