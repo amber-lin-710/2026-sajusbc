@@ -92,7 +92,7 @@ nav.site { display: flex; gap: 4px 22px; flex-wrap: wrap; padding-top: 14px; bor
 .medal { width: 22px; height: 22px; flex: none; vertical-align: middle; }
 .champ .k .medal { width: 26px; height: 26px; }
 .champ b { font-family: var(--font-display); font-size: 20px; }
-.champ span { color: var(--muted); font-size: 13px; }
+.champ > span:last-child { color: var(--muted); font-size: 13px; }
 /* Brackets: one column per round, left to right; wraps to a new line when space runs out */
 .bracket { display: flex; flex-wrap: wrap; gap: 18px 34px; align-items: stretch; padding: 2px 0 4px; }
 .bracket + .bracket { margin-top: 6px; }
