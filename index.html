@@ -621,13 +621,12 @@ function bracket(pfx, d, roster) {
   const short = (st) => st.replace(/^USA[12] /, "").replace("Semifinal", "SF").replace("Quarterfinal", "QF");
   const inUSA1 = new Set(d.ko.filter((k) => k.stage.startsWith("USA1")).flatMap((k) => k.matches.flatMap((x) => [x.teamA, x.teamB])));
   // Footnotes: each stage note is numbered and marked on the total of the team it names
-  const foot = [], mark = {}, base = FOOT_N;
+  const foot = [], mark = {}, base = 0; // numbering restarts in each bracket section
   stages.forEach((st, i) => (st.notes || []).forEach((n) => {
     const t = st.matches.flatMap((x) => [x.teamA, x.teamB]).find((t) => new RegExp(`\\b${t}\\b`).test(n));
     foot.push(`${short(st.stage)}: ${n}`);
     if (t) (mark[`${i}|${t}`] ||= []).push(base + foot.length);
   }));
-  FOOT_N += foot.length;
   const sup = (i, t) => (mark[`${i}|${t}`] || []).map((k) => `<sup>${k}</sup>`).join("");
   const card = (m, i) => {
     // USA2 teams that came down from the USA1 bracket (not winners of the previous USA2 round)
@@ -661,9 +660,7 @@ document.addEventListener("click", (e) => {
     t.querySelectorAll(`[data-col="${i}"]`).forEach((el) => el.classList.add("hlc"));
   }
 });
-let FOOT_N = 0; // footnote numbers run through the whole page
 function teamsResults(ev, d, roster) {
-  FOOT_N = 0;
   const rr2 = d.rr.rr2;
   const final = (pfx) => [...d.ko].reverse().find((k) => k.stage.startsWith(pfx + " Final"));
   const champ = (pfx) => { const f = final(pfx); if (!f) return ""; const w = f.matches[0].winner; return `<div class="champ"><span class="k">${icon("trophy")}${pfx} winner</span><b>Team ${tm(w, roster)}</b><span>${esc(playersFor(w, roster))}</span></div>`; };
