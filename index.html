@@ -30,6 +30,9 @@ img { max-width: 100%; }
   --evening: #8a8091;
   --on-evening: #ffffff;
   --on-accent: #ffffff;
+  --head: #efebee;
+  --zebra: #f8f5f7;
+  --rule: #8a8091;
   --ev-u26: #00539a;
   --ev-u21: #2a7d3c;
   --ev-u26w: #a87800;
@@ -45,14 +48,14 @@ img { max-width: 100%; }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #17121d; --surface: #211a29; --ink: #f1ebf2; --muted: #a99fb0; --line: #352c3e; --meal: #2a2232;
-    --accent: #ec7b95; --evening: #6a6072; --on-evening: #f1ebf2; --on-accent: #17121d;
+    --accent: #ec7b95; --evening: #6a6072; --on-evening: #f1ebf2; --on-accent: #17121d; --head: #2c2434; --zebra: #251e2d; --rule: #8a8091;
     --ev-u26: #6fa6e6; --ev-u21: #6cc77e; --ev-u26w: #f0c44c; --ev-u16: #f27a82; --ev-chal: #b493ea;
     --tint: 20%; --shade-camp: 34%; --shade-play: 14%; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #17121d; --surface: #211a29; --ink: #f1ebf2; --muted: #a99fb0; --line: #352c3e; --meal: #2a2232;
-  --accent: #ec7b95; --evening: #6a6072; --on-evening: #f1ebf2; --on-accent: #17121d;
+  --accent: #ec7b95; --evening: #6a6072; --on-evening: #f1ebf2; --on-accent: #17121d; --head: #2c2434; --zebra: #251e2d; --rule: #8a8091;
   --ev-u26: #6fa6e6; --ev-u21: #6cc77e; --ev-u26w: #f0c44c; --ev-u16: #f27a82; --ev-chal: #b493ea;
   --tint: 20%; --shade-camp: 34%; --shade-play: 14%; color-scheme: dark;
 }
@@ -86,18 +89,24 @@ nav.site { display: flex; gap: 4px 22px; flex-wrap: wrap; padding-top: 14px; bor
 .champ { background: color-mix(in srgb, var(--c) var(--shade-camp), var(--surface)); box-shadow: inset 4px 0 0 var(--c); border-radius: 10px; padding: 12px 14px 12px 18px; display: grid; gap: 2px; min-width: 0; }
 .champ .k { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c); display: flex; align-items: center; gap: 6px; }
 .champ .k .ico { width: 15px; height: 15px; }
+.medal { width: 22px; height: 22px; flex: none; vertical-align: middle; }
+.champ .k .medal { width: 26px; height: 26px; }
 .champ b { font-family: var(--font-display); font-size: 20px; }
 .champ span { color: var(--muted); font-size: 13px; }
 /* Brackets: one column per round, left to right; wraps to a new line when space runs out */
 .bracket { display: flex; flex-wrap: wrap; gap: 18px 34px; align-items: stretch; padding: 2px 0 4px; }
+.bracket + .bracket { margin-top: 6px; }
 .bcol { display: grid; grid-template-rows: auto 1fr; gap: 8px; min-width: 0; flex: 0 1 auto; }
 .bcol > h5 { margin: 0; font-size: 13px; font-weight: 700; display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; }
 .bcol > h5 small { font-weight: 400; color: var(--muted); }
 .bstack { display: flex; flex-direction: column; justify-content: space-around; gap: 16px; }
 .bm { position: relative; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--c); border-radius: 8px; }
-.bm table { border-collapse: separate; border-spacing: 0; font-size: 13px; width: 100%; }
+.bm table { border-collapse: separate; border-spacing: 0; font-size: 13px; table-layout: fixed; width: calc(150px + var(--n) * 38px + 58px); }
+.bm col.tc { width: 150px; } .bm col.sc { width: 38px; } .bm col.totc { width: 58px; }
 .bm th, .bm td { padding: 5px 7px; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.bm th { font-size: 10.5px; font-weight: 600; color: var(--muted); padding-block: 4px 3px; border-bottom: 1px solid var(--line); }
+.bm th { font-size: 10.5px; font-weight: 700; color: var(--ink); background: var(--head); padding-block: 4px 3px; border-bottom: 1px solid var(--line); }
+.bm thead th:last-child { border-top-right-radius: 7px; }
+.bm td:first-child { overflow: hidden; text-overflow: ellipsis; }
 .bm th:first-child, .bm td:first-child { text-align: left; padding-left: 10px; }
 .bm td.tot, .bm th.tot { font-weight: 700; border-left: 1px solid var(--line); padding-right: 10px; }
 .bm tr + tr td { border-top: 1px solid var(--line); }
@@ -115,22 +124,28 @@ nav.site { display: flex; gap: 4px 22px; flex-wrap: wrap; padding-top: 14px; bor
 .links { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12px; }
 .links a { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); text-decoration: none; font-weight: 600; }
 .links a:hover { border-color: var(--c); color: var(--c); }
+.links a.lb { border: 1.5px solid var(--ev-u26); background: color-mix(in srgb, var(--ev-u26) 12%, var(--surface)); color: var(--ev-u26); }
+.links a.lb:hover { background: color-mix(in srgb, var(--ev-u26) 22%, var(--surface)); }
 .links a .ico { width: 12px; height: 12px; }
 /* Round-robin cross table (like the USBF results sheet): click a team to highlight its row and column */
 table.x { border-collapse: collapse; font-size: 13px; }
-table.x th, table.x td { padding: 5px 8px; border: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-table.x thead th { font-size: 12px; font-weight: 700; color: var(--muted); text-align: center; }
-table.x th.l, table.x td.l { text-align: left; }
+table.x th, table.x td { padding: 5px 8px; border: 1px solid var(--line); text-align: center; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.x thead th { font-size: 12px; font-weight: 700; color: var(--ink); background: var(--head); }
+table.x tbody tr:nth-child(even) td { background: var(--zebra); }
+table.x tbody tr.gs td { border-top: 3px solid var(--rule); }
+table.x th.l, table.x td.l { text-align: center; min-width: 170px; }
 table.x td.team { cursor: pointer; font-weight: 700; }
 table.x th:not(:first-child), table.x td:not(:first-child) { width: 64px; min-width: 64px; max-width: 64px; }
+.tblwrap:has(table.x) { width: fit-content; max-width: 100%; margin-inline: auto; }
+.xkey { text-align: center; margin-inline: auto; max-width: 90ch; }
 table.x td.team .no { color: var(--muted); font-weight: 600; margin-right: 6px; }
-table.x td.self { background: var(--meal); }
+table.x tbody tr td.self { background: var(--meal); }
 table.x td small { display: block; font-size: 10px; color: var(--muted); }
 table.x td.tot { font-weight: 800; }
 table.x td.tot.q1 { color: var(--accent); }
 table.x td.tot.q2 { color: var(--ev-u21); }
-table.x tr.hl td, table.x td.hlc { background: color-mix(in srgb, var(--c) 22%, var(--surface)); }
-table.x tr.hl td.self { background: color-mix(in srgb, var(--c) 34%, var(--surface)); }
+table.x tbody tr.hl td, table.x tbody tr td.hlc, table.x thead th.hlc { background: color-mix(in srgb, var(--c) 22%, var(--surface)); }
+table.x tbody tr.hl td.self { background: color-mix(in srgb, var(--c) 34%, var(--surface)); }
 .xkey { margin: 0; font-size: 12.5px; color: var(--muted); }
 .xkey b.q1 { color: var(--accent); } .xkey b.q2 { color: var(--ev-u21); }
 /* Instant player popover (positioned by script so scroll containers don't clip it) */
@@ -141,7 +156,10 @@ table.x tr.hl td.self { background: color-mix(in srgb, var(--c) 34%, var(--surfa
 .tblwrap { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; }
 table.st { border-collapse: collapse; width: 100%; font-size: 13px; }
 table.st th, table.st td { padding: 7px 10px; border-bottom: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-table.st th { font-size: 11.5px; font-weight: 600; color: var(--muted); background: var(--surface); }
+table.st th { font-size: 11.5px; font-weight: 700; color: var(--ink); background: var(--head); }
+table.st tbody tr:nth-child(even) td { background: var(--zebra); }
+table.st tbody tr.q td { background: color-mix(in srgb, var(--c) var(--shade-play), var(--surface)); }
+table.st tr.gs td { border-top: 3px solid var(--rule); }
 table.st th.l, table.st td.l { text-align: left; }
 table.st td.l.wrap { white-space: normal; min-width: 220px; color: var(--muted); }
 table.st td.tot, table.st th.tot { font-weight: 700; }
@@ -223,7 +241,7 @@ nav.cats { display: flex; gap: 6px; overflow-x: auto; padding-block: 16px 18px; 
 table.ov { border-collapse: collapse; width: 100%; min-width: 1060px; font-size: 13px; table-layout: fixed; }
 table.ov col.lead { width: 150px; }
 table.ov th, table.ov td { border-bottom: 1px solid var(--line); border-left: 1px solid var(--line); vertical-align: top; text-align: left; overflow: hidden; }
-table.ov thead th { height: 54px; padding: 9px 10px; font-family: var(--font-display); font-weight: 700; background: var(--surface); }
+table.ov thead th { height: 54px; padding: 9px 10px; font-family: var(--font-display); font-weight: 700; background: var(--head); }
 table.ov thead th span { display: block; font-family: var(--font-body); font-weight: 400; color: var(--muted); font-size: 12px; }
 table.ov tbody tr { height: 84px; }
 table.ov tbody th { padding: 10px; font-family: var(--font-display); font-weight: 700; border-left: none; }
@@ -566,7 +584,7 @@ const playersFor = (team, roster) => {
   return list.join(", ");
 };
 const tm = (team, roster) => `<span class="tm" tabindex="0" data-team="${esc(team)}" data-players="${esc(playersFor(team, roster))}">${esc(team)}</span>`;
-const linkChips = (links) => (links || []).length ? `<div class="links">${links.map((l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${icon(l.kind === "lb" ? "match" : "doc")}${esc(l.label)}</a>`).join("")}</div>` : "";
+const linkChips = (links) => (links || []).length ? `<div class="links">${links.map((l) => `<a${l.kind === "lb" ? ' class="lb"' : ""} href="${esc(l.url)}" target="_blank" rel="noopener">${icon(l.kind === "lb" ? "match" : "doc")}${esc(l.label)}</a>`).join("")}</div>` : "";
 function crossTable(rr, roster, d) {
   const x = rr.cross;
   if (!x) return rrTable(rr, roster);
@@ -587,9 +605,9 @@ function crossTable(rr, roster, d) {
     return `<td data-col="${j}" title="${esc(`${a} v ${b}`)}">${fmtN(vp)}${im ? `<small>${im[0]}–${im[1]}</small>` : ""}</td>`;
   };
   const table = `<div class="tblwrap"><table class="x"><thead><tr><th class="l">Team</th><th>Total</th>${carry ? "<th>Carry</th>" : ""}${x.teams.map((t, j) => `<th data-col="${j}" title="${esc(t)}">${esc(no(t))}</th>`).join("")}${hasBye ? "<th>Bye</th>" : ""}</tr></thead><tbody>${
-    x.teams.map((a, i) => `<tr data-row="${i}"><td class="l team" data-row="${i}"><span class="no">${esc(no(a))}.</span>${tm(a, roster)}</td><td class="tot ${q(a)}">${fmtN((byTeam[a] || [])[ci("total_vp")])}</td>${carry ? `<td>${fmtN((byTeam[a] || [])[ci("carryover_vp_from_rr1")])}</td>` : ""}${x.teams.map((b, j) => cell(a, b, j)).join("")}${hasBye ? `<td>${fmtN((x.bye || {})[a])}</td>` : ""}</tr>`).join("")
+    x.teams.map((a, i) => `<tr data-row="${i}"${i > 0 && q(a) !== q(x.teams[i - 1]) ? ' class="gs"' : ""}><td class="l team" data-row="${i}"><span class="no">${esc(no(a))}.</span>${tm(a, roster)}</td><td class="tot ${q(a)}">${fmtN((byTeam[a] || [])[ci("total_vp")])}</td>${carry ? `<td>${fmtN((byTeam[a] || [])[ci("carryover_vp_from_rr1")])}</td>` : ""}${x.teams.map((b, j) => cell(a, b, j)).join("")}${hasBye ? `<td>${fmtN((x.bye || {})[a])}</td>` : ""}</tr>`).join("")
   }</tbody></table></div>`;
-  const key = `<p class="xkey">Teams are listed in finishing order; column numbers are team numbers. Each box shows the row team's VPs with the IMP score underneath. ${usa1.size ? '<b class="q1">Red totals</b> qualified for the USA1 knockout' : ""}${usa2.size ? ', <b class="q2">green totals</b> for USA2' : ""}. Click a team to highlight its row.</p>`;
+  const key = `<p class="xkey">Teams are listed in finishing order; column numbers are team numbers. Each box shows the row team's VPs with the IMP score underneath. ${usa1.size ? '<b class="q1">Red totals</b> qualified for the USA1 knockout' : ""}${usa2.size ? ', <b class="q2">green totals</b> for USA2' : ""}. Thick lines separate the qualifiers for each knockout. Click a team to highlight its row.</p>`;
   return table + key;
 }
 function bracket(pfx, d, roster) {
@@ -602,14 +620,14 @@ function bracket(pfx, d, roster) {
     const prev = i > 0 ? stages[i - 1].matches.map((x) => x.winner) : [];
     const from = (t) => pfx === "USA2" && inUSA1.has(t) && !prev.includes(t) ? `<span class="from">from USA1</span>` : "";
     const row = (t, side, tot) => `<tr class="${m.winner === t ? "win" : ""}"><td>${tm(t, roster)}${from(t)}</td>${m.segments.map((g) => `<td>${g[side] === null ? "–" : fmtN(g[side])}</td>`).join("")}<td class="tot">${fmtN(tot)}</td></tr>`;
-    return `<div class="bm"><table><thead><tr><th></th>${m.segments.map((_, k) => `<th>${k + 1}</th>`).join("")}<th class="tot">Total</th></tr></thead><tbody>${row(m.teamA, 0, m.totalA)}${row(m.teamB, 1, m.totalB)}</tbody></table></div>`;
+    return `<div class="bm" style="--n:${m.segments.length}"><table><colgroup><col class="tc">${m.segments.map(() => '<col class="sc">').join("")}<col class="totc"></colgroup><thead><tr><th></th>${m.segments.map((_, k) => `<th>${k + 1}</th>`).join("")}<th class="tot">Total</th></tr></thead><tbody>${row(m.teamA, 0, m.totalA)}${row(m.teamB, 1, m.totalB)}</tbody></table></div>`;
   };
-  const cols = stages.map((st, i) => `<div class="bcol"><h5>${esc(short(st.stage))}<small>${st.boards} boards · sets of ${st.boards / st.matches[0].segments.length}</small></h5><div class="bstack">${st.matches.map((m) => card(m, i)).join("")}</div></div>`).join("");
-  const w = stages[stages.length - 1].matches[0].winner;
-  const champ = `<div class="bcol"><h5>${pfx} winner</h5><div class="bstack"><div class="bwin"><span class="k">${icon("trophy")}${pfx}</span><b>${tm(w, roster)}</b></div></div></div>`;
+  const col = (st, i) => `<div class="bcol"><h5>${esc(short(st.stage))}<small>${st.boards} boards · sets of ${st.boards / st.matches[0].segments.length}</small></h5><div class="bstack">${st.matches.map((m) => card(m, i)).join("")}</div></div>`;
+  // 4-round brackets (U26 USA2) read as two lines: rounds 1–2, then 3–4
+  const lines = stages.length > 3 ? [[0, 1], [2, 3]] : [stages.map((_, i) => i)];
   const notes = stages.flatMap((st) => (st.notes || []).map((n) => `${short(st.stage)}: ${n}`));
   const links = stages.map((st) => (st.links || []).length ? `<div class="links"><b>${esc(short(st.stage))}</b>${linkChips(st.links).replace(/^<div class="links">|<\/div>$/g, "")}</div>` : "").join("");
-  return `<section class="rsec"><h3>${icon("trophy")}${pfx} bracket</h3><div class="bracket">${cols}${champ}</div>${notes.length ? `<p class="bnotes">${notes.map(esc).join(" · ")}</p>` : ""}${links}</section>`;
+  return `<section class="rsec"><h3>${icon("trophy")}${pfx} bracket</h3>${lines.map((ix) => `<div class="bracket">${ix.map((i) => col(stages[i], i)).join("")}</div>`).join("")}${notes.length ? `<p class="bnotes">${notes.map(esc).join(" · ")}</p>` : ""}${links}</section>`;
 }
 // Brackets: drop the connector line on the last column of each wrapped line
 function markBracketWraps() {
@@ -632,7 +650,10 @@ document.addEventListener("click", (e) => {
 });
 function teamsResults(ev, d, roster) {
   const rr2 = d.rr.rr2;
+  const final = (pfx) => [...d.ko].reverse().find((k) => k.stage.startsWith(pfx + " Final"));
+  const champ = (pfx) => { const f = final(pfx); if (!f) return ""; const w = f.matches[0].winner; return `<div class="champ"><span class="k">${icon("trophy")}${pfx} winner</span><b>Team ${tm(w, roster)}</b><span>${esc(playersFor(w, roster))}</span></div>`; };
   return `<div class="rhead"><h2>${suit(ev)}${EVENTS[ev].name} Teams</h2><p>Round robins are scored in VPs (20-VP scale); knockouts in IMPs. Totals include any penalties. Hover over or tap a team name to see its players.</p></div>
+    <div class="champs">${champ("USA1")}${champ("USA2")}</div>
     <section class="rsec"><h3>${icon("match")}Round robin${rr2 ? " 2 (final standings)" : ""}</h3>${crossTable(rr2 || d.rr, roster, d)}${linkChips((rr2 || d.rr).links)}</section>
     ${rr2 ? `<section class="rsec"><h3>${icon("match")}Round robin 1</h3>${crossTable(d.rr, roster, { ko: [] })}${linkChips(d.rr.links)}</section>` : ""}
     ${bracket("USA1", d, roster)}
@@ -656,6 +677,9 @@ function teamsResults(ev, d, roster) {
   document.addEventListener("click", (e) => { const el = e.target.closest(".tm"); el ? show(el) : hide(); });
   addEventListener("scroll", hide, true);
 })();
+// Gold / silver / bronze medal with the place number
+const MEDAL = [["#e0b021", "#9c7810"], ["#c3c8cf", "#7f8790"], ["#c98544", "#8c5523"]];
+const medal = (place) => { const [f, st] = MEDAL[place - 1]; return `<svg class="medal" viewBox="0 0 24 24" aria-label="${["1st", "2nd", "3rd"][place - 1]} place"><path d="M7 1.5h4.2l2 5.5H9z" fill="#b83453"/><path d="M17 1.5h-4.2l-2 5.5H15z" fill="#00539a"/><circle cx="12" cy="15" r="7" fill="${f}" stroke="${st}" stroke-width="1.5"/><text x="12" y="18.4" text-anchor="middle" font-size="9" font-weight="800" fill="${st}" font-family="sans-serif">${place}</text></svg>`; };
 function pairsResults(ev, d) {
   const [s1, s2] = d.stages;
   const idx = (st, k) => st.columns.indexOf(k);
@@ -665,11 +689,11 @@ function pairsResults(ev, d) {
   const sorted = (st) => [...st.rows].sort((a, b) => a[idx(st, "rank")] - b[idx(st, "rank")]);
   const top = sorted(s2).slice(0, 3);
   const place = ["1st", "2nd", "3rd"];
-  const podium = `<div class="champs">${top.map((r, i) => `<div class="champ"><span class="k">${icon("trophy")}${place[i]} place</span><b>${pair(s2, r)}</b><span>${fmtN(r[idx(s2, totKey(s2))])} VPs</span></div>`).join("")}</div>`;
+  const podium = `<div class="champs">${top.map((r, i) => `<div class="champ"><span class="k">${medal(i + 1)}${place[i]} place</span><b>${pair(s2, r)}</b><span>${fmtN(r[idx(s2, totKey(s2))])} VPs</span></div>`).join("")}</div>`;
   const table = (st, isFinal) => {
     const rs = rounds(st), hasCarry = st.columns.includes("carryover");
     return `<div class="tblwrap"><table class="st"><thead><tr><th>Rank</th><th class="l">Pair</th>${hasCarry ? "<th>Carryover</th>" : ""}${rs.map((c) => `<th>R${c.split("_")[1]}</th>`).join("")}<th class="tot">Total</th></tr></thead><tbody>${
-      sorted(st).map((r) => `<tr class="${!isFinal && r[idx(st, "qualified")] ? "q" : isFinal && r[idx(st, "rank")] <= 3 ? "q" : ""}"><td class="rk">${r[idx(st, "rank")]}</td><td class="l">${pair(st, r)}${!isFinal && r[idx(st, "qualified")] ? '<span class="qb">Q</span>' : ""}</td>${hasCarry ? `<td>${fmtN(r[idx(st, "carryover")])}</td>` : ""}${rs.map((c) => `<td>${fmtN(r[idx(st, c)])}</td>`).join("")}<td class="tot">${fmtN(r[idx(st, totKey(st))])}</td></tr>`).join("")
+      sorted(st).map((r, i, arr) => { const inQ = (x) => isFinal ? x[idx(st, "rank")] <= 3 : !!x[idx(st, "qualified")]; return `<tr class="${inQ(r) ? "q" : ""}${i > 0 && inQ(r) !== inQ(arr[i - 1]) ? " gs" : ""}"><td class="rk">${isFinal && r[idx(st, "rank")] <= 3 ? medal(r[idx(st, "rank")]) : r[idx(st, "rank")]}</td><td class="l">${pair(st, r)}${!isFinal && r[idx(st, "qualified")] ? '<span class="qb">Q</span>' : ""}</td>${hasCarry ? `<td>${fmtN(r[idx(st, "carryover")])}</td>` : ""}${rs.map((c) => `<td>${fmtN(r[idx(st, c)])}</td>`).join("")}<td class="tot">${fmtN(r[idx(st, totKey(st))])}</td></tr>`; }).join("")
     }</tbody></table></div>`;
   };
   return `<div class="rhead"><h2>${suit(ev)}${EVENTS[ev].name} Pairs</h2><p>Scored in VPs (20-VP scale). The final includes carryover VPs from the qualifier.</p></div>
