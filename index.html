@@ -82,7 +82,7 @@ nav.site { display: flex; gap: 4px 22px; flex-wrap: wrap; padding-top: 14px; bor
 .rhead h2 { margin: 0; font-family: var(--font-display); font-size: 24px; font-weight: 800; }
 .rhead h2 .suit { margin-right: 8px; }
 .rhead p { margin: 0; color: var(--muted); max-width: 75ch; }
-.rsec { margin-top: 26px; display: grid; gap: 12px; }
+.rsec { margin-top: 24px; padding-top: 22px; border-top: 1px solid var(--line); display: grid; gap: 12px; }
 .rsec > h3 { margin: 0; font-family: var(--font-display); font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
 .rsec > h3 .ico { width: 18px; height: 18px; color: var(--c); }
 .champs { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
@@ -120,13 +120,15 @@ nav.site { display: flex; gap: 4px 22px; flex-wrap: wrap; padding-top: 14px; bor
 .bwin .k { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c); display: flex; gap: 6px; align-items: center; }
 .bwin .k .ico { width: 14px; height: 14px; }
 .bwin b { font-family: var(--font-display); font-size: 18px; }
-.bnotes { margin: 0; font-size: 12px; color: var(--muted); }
-.links { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12px; }
-.links a { display: inline-flex; align-items: center; gap: 5px; padding: 2px 9px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); text-decoration: none; font-weight: 600; }
+.bnotes { margin: 0; font-size: 12.5px; color: var(--muted); text-align: center; display: grid; gap: 2px; }
+.bnotes sup, .bm sup { font-size: 9px; font-weight: 800; color: var(--accent); margin-left: 1px; }
+.rsec:has(.bracket) .links, .rsec:has(table.x) .links { justify-content: center; }
+.links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13.5px; }
+.links a { display: inline-flex; align-items: center; gap: 6px; padding: 5px 13px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); text-decoration: none; font-weight: 600; }
 .links a:hover { border-color: var(--c); color: var(--c); }
 .links a.lb { border: 1.5px solid var(--ev-u26); background: color-mix(in srgb, var(--ev-u26) 12%, var(--surface)); color: var(--ev-u26); }
 .links a.lb:hover { background: color-mix(in srgb, var(--ev-u26) 22%, var(--surface)); }
-.links a .ico { width: 12px; height: 12px; }
+.links a .ico { width: 15px; height: 15px; }
 /* Round-robin cross table (like the USBF results sheet): click a team to highlight its row and column */
 table.x { border-collapse: collapse; font-size: 13px; }
 table.x th, table.x td { padding: 5px 8px; border: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; width: 64px; min-width: 64px; max-width: 64px; }
@@ -148,7 +150,7 @@ table.x td.tot.q1 { color: var(--c); }
 table.x td.tot.q2 { color: var(--muted); }
 table.x tbody tr.hl td, table.x tbody tr td.hlc, table.x thead th.hlc { background: color-mix(in srgb, var(--c) 22%, var(--surface)); }
 table.x tbody tr.hl td.self { background: color-mix(in srgb, var(--c) 34%, var(--surface)); }
-.xkey { margin: 0; font-size: 12.5px; color: var(--muted); }
+.xkey { margin: 0 auto; font-size: 12.5px; color: var(--muted); }
 .xkey b.q1 { color: var(--c); } .xkey b.q2 { color: var(--muted); }
 /* Instant player popover (positioned by script so scroll containers don't clip it) */
 .tm { cursor: help; text-decoration: underline dotted color-mix(in srgb, currentColor 45%, transparent); text-underline-offset: 3px; }
@@ -618,19 +620,26 @@ function bracket(pfx, d, roster) {
   if (!stages.length) return "";
   const short = (st) => st.replace(/^USA[12] /, "").replace("Semifinal", "SF").replace("Quarterfinal", "QF");
   const inUSA1 = new Set(d.ko.filter((k) => k.stage.startsWith("USA1")).flatMap((k) => k.matches.flatMap((x) => [x.teamA, x.teamB])));
+  // Footnotes: each stage note is numbered and marked on the total of the team it names
+  const foot = [], mark = {};
+  stages.forEach((st, i) => (st.notes || []).forEach((n) => {
+    const t = st.matches.flatMap((x) => [x.teamA, x.teamB]).find((t) => new RegExp(`\\b${t}\\b`).test(n));
+    foot.push(`${short(st.stage)}: ${n}`);
+    if (t) (mark[`${i}|${t}`] ||= []).push(foot.length);
+  }));
+  const sup = (i, t) => (mark[`${i}|${t}`] || []).map((k) => `<sup>${k}</sup>`).join("");
   const card = (m, i) => {
     // USA2 teams that came down from the USA1 bracket (not winners of the previous USA2 round)
     const prev = i > 0 ? stages[i - 1].matches.map((x) => x.winner) : [];
     const from = (t) => pfx === "USA2" && inUSA1.has(t) && !prev.includes(t) ? `<span class="from">from USA1</span>` : "";
-    const row = (t, side, tot) => `<tr class="${m.winner === t ? "win" : ""}"><td>${tm(t, roster)}${from(t)}</td>${m.segments.map((g) => `<td>${g[side] === null ? "–" : fmtN(g[side])}</td>`).join("")}<td class="tot">${fmtN(tot)}</td></tr>`;
+    const row = (t, side, tot) => `<tr class="${m.winner === t ? "win" : ""}"><td>${tm(t, roster)}${from(t)}</td>${m.segments.map((g) => `<td>${g[side] === null ? "–" : fmtN(g[side])}</td>`).join("")}<td class="tot">${fmtN(tot)}${sup(i, t)}</td></tr>`;
     return `<div class="bm" style="--n:${m.segments.length}"><table><colgroup><col class="tc">${m.segments.map(() => '<col class="sc">').join("")}<col class="totc"></colgroup><thead><tr><th></th>${m.segments.map((_, k) => `<th>${k + 1}</th>`).join("")}<th class="tot">Total</th></tr></thead><tbody>${row(m.teamA, 0, m.totalA)}${row(m.teamB, 1, m.totalB)}</tbody></table></div>`;
   };
   const col = (st, i) => `<div class="bcol"><h5>${esc(short(st.stage))}<small>${st.boards} boards · sets of ${st.boards / st.matches[0].segments.length}</small></h5><div class="bstack">${st.matches.map((m) => card(m, i)).join("")}</div></div>`;
   // 4-round brackets (U26 USA2) read as two lines: rounds 1–2, then 3–4
   const lines = stages.length > 3 ? [[0, 1], [2, 3]] : [stages.map((_, i) => i)];
-  const notes = stages.flatMap((st) => (st.notes || []).map((n) => `${short(st.stage)}: ${n}`));
   const links = stages.map((st) => (st.links || []).length ? `<div class="links"><b>${esc(short(st.stage))}</b>${linkChips(st.links).replace(/^<div class="links">|<\/div>$/g, "")}</div>` : "").join("");
-  return `<section class="rsec"><h3>${icon("trophy")}${pfx} bracket</h3>${lines.map((ix) => `<div class="bracket">${ix.map((i) => col(stages[i], i)).join("")}</div>`).join("")}${notes.length ? `<p class="bnotes">${notes.map(esc).join(" · ")}</p>` : ""}${links}</section>`;
+  return `<section class="rsec"><h3>${icon("trophy")}${pfx} bracket</h3>${lines.map((ix) => `<div class="bracket">${ix.map((i) => col(stages[i], i)).join("")}</div>`).join("")}${foot.length ? `<div class="bnotes">${foot.map((n, k) => `<span><sup>${k + 1}</sup> ${esc(n)}</span>`).join("")}</div>` : ""}${links}</section>`;
 }
 // Brackets: drop the connector line on the last column of each wrapped line
 function markBracketWraps() {
