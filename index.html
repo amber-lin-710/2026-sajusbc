@@ -117,8 +117,8 @@ nav.site { display: flex; gap: 4px 22px; flex-wrap: wrap; padding-top: 14px; bor
 .bm .from { margin-left: 6px; font-size: 10px; font-weight: 600; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 5px; }
 .rsec.brk { position: relative; }
 svg.arrows { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 2; }
-svg.arrows path.a { fill: none; stroke: var(--c); stroke-width: 1.75; stroke-linecap: round; opacity: .75; }
-svg.arrows path.h { fill: var(--c); opacity: .75; }
+svg.arrows path.a { fill: none; stroke: var(--rule); stroke-width: 1.5; stroke-linecap: round; opacity: .5; }
+svg.arrows path.h { fill: var(--rule); opacity: .5; }
 .bwin { background: color-mix(in srgb, var(--c) var(--shade-camp), var(--surface)); border-left: 4px solid var(--c); border-radius: 8px; padding: 10px 14px 10px 12px; display: grid; gap: 2px; }
 .bwin .k { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c); display: flex; gap: 6px; align-items: center; }
 .bwin .k .ico { width: 14px; height: 14px; }
@@ -129,8 +129,8 @@ svg.arrows path.h { fill: var(--c); opacity: .75; }
 .links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13.5px; }
 .links a { display: inline-flex; align-items: center; gap: 6px; padding: 5px 13px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); text-decoration: none; font-weight: 600; }
 .links a:hover { border-color: var(--c); color: var(--c); }
-.links a.lb { border: 1.5px solid var(--ev-u26); background: color-mix(in srgb, var(--ev-u26) 12%, var(--surface)); color: var(--ev-u26); }
-.links a.lb:hover { background: color-mix(in srgb, var(--ev-u26) 22%, var(--surface)); }
+.links a.lb { border: 1.5px solid var(--rule); background: var(--head); color: var(--ink); }
+.links a.lb:hover { background: color-mix(in srgb, var(--rule) 25%, var(--surface)); color: var(--ink); border-color: var(--ink); }
 .links a .ico { width: 15px; height: 15px; }
 /* Round-robin cross table (like the USBF results sheet): click a team to highlight its row and column */
 table.x { border-collapse: collapse; font-size: 13px; }
@@ -640,7 +640,13 @@ function bracket(pfx, d, roster) {
     const row = (t, side, tot) => `<tr class="${m.winner === t ? "win" : ""}" data-team="${esc(t)}"><td>${tm(t, roster)}${from(t)}</td>${m.segments.map((g) => `<td>${g[side] === null ? "–" : fmtN(g[side])}</td>`).join("")}<td class="tot">${fmtN(tot)}${sup(i, t)}</td></tr>`;
     return `<div class="bm" style="--n:${m.segments.length}"><table><colgroup><col class="tc">${m.segments.map(() => '<col class="sc">').join("")}<col class="totc"></colgroup><thead><tr><th></th>${m.segments.map((_, k) => `<th>${k + 1}</th>`).join("")}<th class="tot">Total</th></tr></thead><tbody>${row(m.teamA, 0, m.totalA)}${row(m.teamB, 1, m.totalB)}</tbody></table></div>`;
   };
-  const col = (st, i) => `<div class="bcol" data-i="${i}"><h5>${esc(short(st.stage))}<small>${st.boards} boards · sets of ${st.boards / st.matches[0].segments.length}</small></h5><div class="bstack">${st.matches.map((m) => card(m, i)).join("")}</div></div>`;
+  const ordered = (st, i) => {
+    if (i === 0) return st.matches;
+    const prev = stages[i - 1].matches;
+    const feed = (m) => Math.min(...[m.teamA, m.teamB].map((t) => { const k = prev.findIndex((p) => p.winner === t); return k < 0 ? Infinity : k; }));
+    return [...st.matches].sort((a, b) => feed(a) - feed(b));
+  };
+  const col = (st, i) => `<div class="bcol" data-i="${i}"><h5>${esc(short(st.stage))}<small>${st.boards} boards · sets of ${st.boards / st.matches[0].segments.length}</small></h5><div class="bstack">${ordered(st, i).map((m) => card(m, i)).join("")}</div></div>`;
   // 4-round brackets (U26 USA2) read as two lines: rounds 1–2, then 3–4
   const lines = stages.length > 3 ? [[0, 1], [2, 3]] : [stages.map((_, i) => i)];
   const links = stages.map((st) => (st.links || []).length ? `<div class="links"><b>${esc(short(st.stage))}</b>${linkChips(st.links).replace(/^<div class="links">|<\/div>$/g, "")}</div>` : "").join("");
