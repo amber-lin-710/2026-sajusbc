@@ -667,8 +667,19 @@ function drawBracketArrows() {
         const a = from.closest(".bm").getBoundingClientRect(), fr = from.getBoundingClientRect(), b = tr.getBoundingClientRect();
         const x1 = a.right - box.left + 3, y1 = fr.top + fr.height / 2 - box.top;
         const x2 = b.left - box.left - 9, y2 = b.top + b.height / 2 - box.top;
-        const dx = Math.max(28, Math.abs(x2 - x1) / 2);
-        out += `<path class="a" d="M${x1},${y1} C${x1 + dx},${y1} ${x2 - dx},${y2} ${x2},${y2}"/><path class="h" d="M${x2 + 7},${y2} l-8,-4.5 v9 z"/>`;
+        const lineA = from.closest(".bracket"), lineB = tr.closest(".bracket");
+        let d;
+        if (lineA === lineB) {
+          // Same line: a gentle S-curve across the gap
+          const dx = Math.max(28, Math.abs(x2 - x1) / 2);
+          d = `M${x1},${y1} C${x1 + dx},${y1} ${x2 - dx},${y2} ${x2},${y2}`;
+        } else {
+          // Next line: out to the right, down between the lines, across, and in from the left (rounded corners)
+          const r = 10, xr = x1 + 18, xl = x2 - 18;
+          const yL = (lineA.getBoundingClientRect().bottom + lineB.getBoundingClientRect().top) / 2 - box.top;
+          d = `M${x1},${y1} H${xr - r} Q${xr},${y1} ${xr},${y1 + r} V${yL - r} Q${xr},${yL} ${xr - r},${yL} H${xl + r} Q${xl},${yL} ${xl},${yL + r} V${y2 - r} Q${xl},${y2} ${xl + r},${y2} H${x2}`;
+        }
+        out += `<path class="a" d="${d}"/><path class="h" d="M${x2 + 7},${y2} l-8,-4.5 v9 z"/>`;
       });
     });
     svg.innerHTML = out;
