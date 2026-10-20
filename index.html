@@ -89,7 +89,7 @@ nav.site { display: flex; gap: 4px 22px; flex-wrap: wrap; padding-top: 14px; bor
 .champ b { font-family: var(--font-display); font-size: 20px; }
 .champ span { color: var(--muted); font-size: 13px; }
 /* Brackets: columns = rounds, left to right; matches centered in each column */
-.bracket { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(230px, 1fr); gap: 0 30px; overflow-x: auto; padding: 4px 2px 10px; }
+.bracket { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(200px, 1fr); gap: 0 30px; overflow-x: auto; padding: 4px 2px 10px; }
 .bcol { display: grid; grid-template-rows: auto 1fr; gap: 8px; min-width: 0; }
 .bcol > h5 { margin: 0; font-size: 13px; font-weight: 700; display: flex; gap: 8px; align-items: baseline; }
 .bcol > h5 small { font-weight: 400; color: var(--muted); }
@@ -564,8 +564,10 @@ function bracket(pfx, d, roster) {
   if (!stages.length) return "";
   const short = (st) => st.replace(/^USA[12] /, "").replace("Semifinal", "SF").replace("Quarterfinal", "QF");
   const card = (m, i) => {
-    const prev = i > 0 ? stages[i - 1].matches.map((x) => x.winner) : null;
-    const from = (t) => prev && !prev.includes(t) && pfx === "USA2" ? `<span class="from">from USA1</span>` : "";
+    // USA2 teams that came down from the USA1 bracket (not winners of the previous USA2 round)
+    const prev = i > 0 ? stages[i - 1].matches.map((x) => x.winner) : [];
+    const inUSA1 = new Set(d.ko.filter((k) => k.stage.startsWith("USA1")).flatMap((k) => k.matches.flatMap((x) => [x.teamA, x.teamB])));
+    const from = (t) => pfx === "USA2" && inUSA1.has(t) && !prev.includes(t) ? `<span class="from">from USA1</span>` : "";
     const row = (t, tot) => `<div class="row${m.winner === t ? " win" : ""}"><span class="t">${tm(t, roster)}</span>${from(t)}<span class="n">${fmtN(tot)}</span></div>`;
     const sets = m.segments.map((g) => g[1] === "w/d" ? "w/d" : `${fmtN(g[0])}–${fmtN(g[1])}`).join(" · ");
     return `<div class="bm">${row(m.teamA, m.totalA)}${row(m.teamB, m.totalB)}<div class="sets">Sets ${sets}</div></div>`;
