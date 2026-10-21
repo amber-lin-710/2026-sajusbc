@@ -245,7 +245,8 @@ table.st td.rk { font-weight: 700; color: var(--c); }
 .art .ico { width: 16px; height: 16px; }
 @media (max-width: 560px) { .hmed { grid-template-columns: 1fr; } .hcount { gap: 20px; } }
 .wgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.wcard img, .wph { width: 100%; aspect-ratio: 16 / 9; }
+.wcard img, .wph { width: 100%; aspect-ratio: 3 / 2; }
+.wcard img { object-position: center 20%; }
 .wph { display: grid; place-items: center; align-content: center; gap: 6px; background: color-mix(in srgb, var(--c) var(--shade-play), var(--surface)); border-bottom: 1px dashed var(--line); color: var(--muted); font-weight: 600; font-size: 14px; }
 .wph span { font-size: 40px; color: var(--c); line-height: 1; }
 @media (max-width: 720px) { .wgrid { grid-template-columns: 1fr; } }
