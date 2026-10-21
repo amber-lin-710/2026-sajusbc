@@ -668,7 +668,7 @@ const PAGES = [
   { id: "schedule", name: "Schedule", ic: "cal" },
   { id: "results", name: "Results", ic: "trophy" },
   { id: "players", name: "The Players", ic: "people" },
-  { id: "past", name: "Past JUSBCs", ic: "history" },
+  { id: "past", name: "Past Events", ic: "history" },
   { id: "hotel", name: "Hotel Info", ic: "hotel" },
 ];
 const fromHash = location.hash.slice(1), saved = store.get("sajusbc-cat");
@@ -741,7 +741,7 @@ function renderPast() {
   const cat = (c) => `<div class="pcat" style="--c:${c.ev ? color(c.ev) : "var(--muted)"}"><h4>${c.ev ? suit(c.ev) : ""}${esc(evName(c))}</h4>${team("USA1", c.usa1)}${team("USA2", c.usa2)}${pairs(c)}${c.world ? `<p class="pw">${(c.medals || []).length ? `<span class="pwm">${c.medals.map((m) => medal(MEDAL_PLACE[m])).join("")}</span>` : icon("trophy")}<span>${esc(c.world)}${c.qualified_for ? ` <small>at the ${esc(c.qualified_for.split(/ - |,/)[0])}</small>` : ""}</span></p>` : ""}</div>`;
   const links = (e) => linkChips([e.results_url && { label: "Results on usbf.org", url: e.results_url, kind: "doc" }, e.event_url && { label: "Event page", url: e.event_url, kind: "doc" }].filter(Boolean));
   const edition = (e) => `<details class="ped"><summary><span class="yr">${e.year}</span><span class="pn2">${esc(e.name)}</span><span class="pmed">${e.categories.flatMap((c) => c.medals || []).map((m) => medal(MEDAL_PLACE[m])).join("")}</span></summary><div class="pbody"><p class="pmeta">${[e.dates, e.location].filter(Boolean).map(esc).join(" · ")}${e.named_after ? `<br>Named for ${esc(e.named_after.split(",")[0])}` : ""}</p>${e.blurb ? `<p class="pblurb">${esc(e.blurb)}</p>` : ""}<div class="pcats">${e.categories.map(cat).join("")}</div>${links(e)}</div></details>`;
-  el.innerHTML = `<div class="rhead"><h2>${icon("history")} Past JUSBCs</h2><p>The ${esc(F.event)} chose the US teams for the ${esc(F.wybtc)} in ${esc(F.where)}, where they brought home ${F.medals.length} medals.</p></div>
+  el.innerHTML = `<div class="rhead"><h2>${icon("history")} 2024–2025 USBF Junior Cycle</h2><p>The ${esc(F.event)} chose the US teams for the ${esc(F.wybtc)} in ${esc(F.where)}, where they brought home ${F.medals.length} medals.</p></div>
     ${medalsHtml}
     ${(F.articles || []).length ? `<div class="arts">${F.articles.map((a) => `<div class="art"><span>${icon("doc")}<span class="at"><b>${esc(a.label)}</b>${a.about ? `<small>${esc(a.about)}</small>` : ""}</span></span>${linkChips([{ label: "PDF", url: a.pdf, kind: "doc" }, { label: "ACBL online issue", url: a.online, kind: "doc" }])}</div>`).join("")}</div>` : ""}
     <section class="rsec"><h3>${icon("trophy")}The 2025 US teams</h3><p class="rnote">Chosen at the ${esc(F.event)}.</p><div class="wgrid">${[...F.winners].sort((a, b) => a.label.localeCompare(b.label) || ORDER.indexOf(a.ev) - ORDER.indexOf(b.ev)).map(winner).join("")}</div></section>
