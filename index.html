@@ -225,31 +225,40 @@ table.st td.rk { font-weight: 700; color: var(--c); }
 .pw { margin: 2px 0 0; display: flex; gap: 8px; align-items: center; font-size: 13px; font-weight: 600; }
 .pw .medal { width: 24px; height: 24px; }
 .pw small { display: block; font-weight: 400; color: var(--muted); }
-.hero { background: var(--surface); border: 1px solid var(--line); padding: 26px 20px 24px; display: grid; justify-items: center; gap: 18px; text-align: center; }
-.hlogo2 { width: min(320px, 70%); height: auto; }
-.hcount { display: flex; gap: 34px; justify-content: center; }
+.hero { background: var(--surface); border: 1px solid var(--line); padding: 16px 20px; display: grid; grid-template-columns: auto auto minmax(0, 1fr); align-items: center; gap: 16px 32px; }
+.hlogo2 { width: 170px; height: auto; }
+.hcount { display: grid; gap: 10px; justify-content: center; }
 .hcount > div { display: flex; align-items: center; gap: 10px; }
-.hcount .medal { width: 40px; height: 40px; }
-.hcount b { font-family: var(--font-display); font-size: 40px; line-height: 1; }
+.hcount .medal { width: 34px; height: 34px; }
+.hcount b { font-family: var(--font-display); font-size: 32px; line-height: 1; }
 .hcount span { color: var(--muted); font-weight: 700; font-size: 15px; }
-.hmed { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; width: min(680px, 100%); }
-.hmed li { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: 1px solid var(--line); border-left: 4px solid var(--c); background: color-mix(in srgb, var(--c) var(--shade-play), var(--surface)); text-align: left; }
-.hmed .medal { width: 40px; height: 40px; }
+.hmed { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.hmed li { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: 1px solid var(--line); border-left: 4px solid var(--c); background: color-mix(in srgb, var(--c) var(--shade-play), var(--surface)); text-align: left; }
+.hmed .medal { width: 30px; height: 30px; }
 .hmed span { display: grid; gap: 2px; }
-.hmed b { font-family: var(--font-display); font-size: 18px; }
+.hmed b { font-family: var(--font-display); font-size: 16px; }
 .hmed b .suit { margin-right: 6px; }
 .hmed small { color: var(--muted); font-size: 13px; font-weight: 600; }
 .arts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px; margin-top: 12px; }
 .art { background: var(--surface); border: 1px solid var(--line); padding: 10px 14px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
 .art > span { display: flex; align-items: center; gap: 8px; }
 .art .ico { width: 16px; height: 16px; }
-@media (max-width: 560px) { .hmed { grid-template-columns: 1fr; } .hcount { gap: 20px; } }
-.wgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 900px) { .hero { grid-template-columns: auto minmax(0, 1fr); } .hmed { grid-column: 1 / -1; } }
+@media (max-width: 560px) { .hero { grid-template-columns: 1fr; justify-items: center; } .hmed { grid-template-columns: 1fr; width: 100%; } }
+.art .at { display: grid; } .art .at small { color: var(--muted); font-size: 12px; }
+.pwm { display: flex; gap: 2px; } .pwm .medal { width: 22px; height: 22px; }
+.wgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .wcard img, .wph { width: 100%; aspect-ratio: 3 / 2; }
 .wcard img { object-position: center 20%; }
 .wph { display: grid; place-items: center; align-content: center; gap: 6px; background: color-mix(in srgb, var(--c) var(--shade-play), var(--surface)); border-bottom: 1px dashed var(--line); color: var(--muted); font-weight: 600; font-size: 14px; }
 .wph span { font-size: 40px; color: var(--c); line-height: 1; }
-@media (max-width: 720px) { .wgrid { grid-template-columns: 1fr; } }
+@media (max-width: 980px) { .wgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .wgrid { grid-template-columns: 1fr; } }
+.wcard figcaption { padding: 8px 10px 10px; }
+.wcard b { font-size: 15.5px; }
+.wcard .wn { font-size: 12px; }
+.wcard .wm { font-size: 12px; }
+.wcard .wm .medal { width: 18px; height: 18px; }
 .wcard { margin: 0; background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--c); display: grid; grid-template-rows: auto 1fr; }
 .wcard img { object-fit: cover; display: block; background: var(--head); }
 .wcard figcaption { padding: 10px 12px 12px; display: grid; gap: 3px; align-content: start; }
@@ -468,7 +477,7 @@ footer { margin-top: 28px; font-size: 13px; color: var(--muted); }
 </div>
 
 <script src="players-data.js?v=58c26ca6"></script>
-<script src="past-data.js?v=1544cae1"></script>
+<script src="past-data.js?v=c07ff491"></script>
 <script src="results-data.js?v=402ca9cc"></script>
 <script>
 const EVENTS = {
@@ -729,13 +738,13 @@ function renderPast() {
   // Every edition, collapsed
   const team = (label, t) => t ? `<div class="pt"><span class="pl">${label}</span><b>${t.team ? "Team " + esc(t.team) : ""}</b><span>${esc((t.players || []).join(", "))}${t.npc ? ` · NPC ${esc(t.npc)}` : ""}</span></div>` : "";
   const pairs = (c) => c.top_pairs ? `<div class="pt"><span class="pl">Top pairs</span><span>${c.top_pairs.map((p) => `${p.place ? p.place + ". " : ""}${esc((p.players || []).join(" & "))}`).join("<br>")}</span></div>` : "";
-  const cat = (c) => `<div class="pcat" style="--c:${c.ev ? color(c.ev) : "var(--muted)"}"><h4>${c.ev ? suit(c.ev) : ""}${esc(evName(c))}</h4>${team("USA1", c.usa1)}${team("USA2", c.usa2)}${pairs(c)}${c.world ? `<p class="pw">${c.medal ? medal(MEDAL_PLACE[c.medal]) : icon("trophy")}<span>${esc(c.world)}${c.qualified_for ? ` <small>at the ${esc(c.qualified_for.split(/ - |,/)[0])}</small>` : ""}</span></p>` : ""}</div>`;
+  const cat = (c) => `<div class="pcat" style="--c:${c.ev ? color(c.ev) : "var(--muted)"}"><h4>${c.ev ? suit(c.ev) : ""}${esc(evName(c))}</h4>${team("USA1", c.usa1)}${team("USA2", c.usa2)}${pairs(c)}${c.world ? `<p class="pw">${(c.medals || []).length ? `<span class="pwm">${c.medals.map((m) => medal(MEDAL_PLACE[m])).join("")}</span>` : icon("trophy")}<span>${esc(c.world)}${c.qualified_for ? ` <small>at the ${esc(c.qualified_for.split(/ - |,/)[0])}</small>` : ""}</span></p>` : ""}</div>`;
   const links = (e) => linkChips([e.results_url && { label: "Results on usbf.org", url: e.results_url, kind: "doc" }, e.event_url && { label: "Event page", url: e.event_url, kind: "doc" }].filter(Boolean));
-  const edition = (e) => `<details class="ped"><summary><span class="yr">${e.year}</span><span class="pn2">${esc(e.name)}</span><span class="pmed">${e.categories.filter((c) => c.medal).map((c) => medal(MEDAL_PLACE[c.medal])).join("")}</span></summary><div class="pbody"><p class="pmeta">${[e.dates, e.location].filter(Boolean).map(esc).join(" · ")}${e.named_after ? `<br>Named for ${esc(e.named_after.split(",")[0])}` : ""}</p>${e.blurb ? `<p class="pblurb">${esc(e.blurb)}</p>` : ""}<div class="pcats">${e.categories.map(cat).join("")}</div>${links(e)}</div></details>`;
+  const edition = (e) => `<details class="ped"><summary><span class="yr">${e.year}</span><span class="pn2">${esc(e.name)}</span><span class="pmed">${e.categories.flatMap((c) => c.medals || []).map((m) => medal(MEDAL_PLACE[m])).join("")}</span></summary><div class="pbody"><p class="pmeta">${[e.dates, e.location].filter(Boolean).map(esc).join(" · ")}${e.named_after ? `<br>Named for ${esc(e.named_after.split(",")[0])}` : ""}</p>${e.blurb ? `<p class="pblurb">${esc(e.blurb)}</p>` : ""}<div class="pcats">${e.categories.map(cat).join("")}</div>${links(e)}</div></details>`;
   el.innerHTML = `<div class="rhead"><h2>${icon("history")} Past JUSBCs</h2><p>The ${esc(F.event)} chose the US teams for the ${esc(F.wybtc)} in ${esc(F.where)}, where they brought home ${F.medals.length} medals.</p></div>
     ${medalsHtml}
-    ${(F.articles || []).length ? `<div class="arts">${F.articles.map((a) => `<div class="art"><span>${icon("doc")}<b>${esc(a.label)}</b></span>${linkChips([{ label: "PDF", url: a.pdf, kind: "doc" }, { label: "ACBL online issue", url: a.online, kind: "doc" }])}</div>`).join("")}</div>` : ""}
-    <section class="rsec"><h3>${icon("trophy")}The 2025 US teams</h3><p class="rnote">Chosen at the ${esc(F.event)}.</p><div class="wgrid">${F.winners.map(winner).join("")}</div></section>
+    ${(F.articles || []).length ? `<div class="arts">${F.articles.map((a) => `<div class="art"><span>${icon("doc")}<span class="at"><b>${esc(a.label)}</b>${a.about ? `<small>${esc(a.about)}</small>` : ""}</span></span>${linkChips([{ label: "PDF", url: a.pdf, kind: "doc" }, { label: "ACBL online issue", url: a.online, kind: "doc" }])}</div>`).join("")}</div>` : ""}
+    <section class="rsec"><h3>${icon("trophy")}The 2025 US teams</h3><p class="rnote">Chosen at the ${esc(F.event)}.</p><div class="wgrid">${[...F.winners].sort((a, b) => a.label.localeCompare(b.label) || ORDER.indexOf(a.ev) - ORDER.indexOf(b.ev)).map(winner).join("")}</div></section>
     <section class="rsec"><h3>${icon("camp")}Photos</h3>${gallery}</section>
     <section class="rsec"><h3>${icon("history")}Every JUSBC since 2009</h3><p class="rnote">Winners and world results for each edition, compiled from usbf.org. Select a year to expand it.</p><div class="peds">${P.map(edition).join("")}</div></section>
     <div id="lightbox" hidden><button class="lbx" aria-label="Close">×</button><button class="lbp" aria-label="Previous photo">‹</button><img alt=""><button class="lbn" aria-label="Next photo">›</button></div>`;
