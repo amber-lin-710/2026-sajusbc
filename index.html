@@ -184,6 +184,22 @@ table.st tr.q td { background: color-mix(in srgb, var(--c) var(--shade-play), va
 table.st td.rk { font-weight: 700; color: var(--c); }
 .qb { display: inline-block; font-size: 10.5px; font-weight: 700; color: var(--c); border: 1px solid var(--c); border-radius: 0; padding: 0 6px; margin-left: 6px; }
 .rnote { margin: 0; font-size: 12.5px; color: var(--muted); max-width: 90ch; }
+/* The Players */
+.pgrid { display: grid; gap: 12px; }
+.pgrid.teams { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+.pgrid.pairs { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.pgroup { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--c); padding: 12px 14px; display: grid; gap: 10px; align-content: start; }
+.pgroup h4 { margin: 0; font-family: var(--font-display); font-size: 16px; }
+.pgroup ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.person { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.person img, .person .ini { width: 52px; height: 52px; flex: none; object-fit: cover; object-position: top; background: var(--head); }
+.person .ini { display: grid; place-items: center; font-family: var(--font-display); font-weight: 700; font-size: 17px; color: var(--c); background: color-mix(in srgb, var(--c) var(--shade-play), var(--surface)); }
+.person .pn { display: grid; font-size: 13.5px; font-weight: 600; line-height: 1.25; min-width: 0; }
+.person .pn a { color: var(--ink); text-decoration: underline dotted; text-underline-offset: 3px; }
+.person .pn a:hover { color: var(--c); }
+.person .role { font-style: normal; font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c); }
+.pfoot { margin-top: 14px; }
+#page-players .rhead h2, #page-past .rhead h2 { display: flex; align-items: center; gap: 8px; }
 /* Past JUSBCs */
 .tally { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 26px; margin: 4px 0 6px; padding: 14px 18px; background: var(--surface); border: 1px solid var(--line); }
 .tally > div { display: flex; align-items: center; gap: 8px; }
@@ -372,6 +388,12 @@ footer { margin-top: 28px; font-size: 13px; color: var(--muted); }
     <div id="pop" role="tooltip" hidden></div>
   </section>
 
+  <section id="page-players" hidden>
+    <div class="rhead" id="phead"></div>
+    <nav class="cats" id="pcats" role="tablist" aria-label="Choose a category"></nav>
+    <div id="pview"></div>
+  </section>
+
   <section id="page-past" hidden></section>
 
   <section id="page-other" class="pending" hidden>
@@ -380,6 +402,7 @@ footer { margin-top: 28px; font-size: 13px; color: var(--muted); }
   </section>
 </div>
 
+<script src="players-data.js?v=5526fa9b"></script>
 <script src="past-data.js?v=d30d3404"></script>
 <script src="results-data.js?v=402ca9cc"></script>
 <script>
@@ -407,6 +430,7 @@ const PATHS = {
   hotel:  "M4 21V3h12v18M16 9h4v12M8 7h4M8 11h4M8 15h4M2 21h20",
   grid:   "M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z",
   arrow:  "M5 12h14M13 6l6 6-6 6",
+  people: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8",
   history: "M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5M12 7v5l3 2",
   doc:    "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M9 13h6M9 17h6",
 };
@@ -569,6 +593,7 @@ const ids = ["overview", ...ORDER];
 const PAGES = [
   { id: "schedule", name: "Schedule", ic: "cal" },
   { id: "results", name: "Results", ic: "trophy" },
+  { id: "players", name: "The Players", ic: "people" },
   { id: "past", name: "Past JUSBCs", ic: "history" },
   { id: "hotel", name: "Hotel Info", ic: "hotel" },
 ];
@@ -588,11 +613,36 @@ function renderSite() {
   document.getElementById("page-schedule").hidden = page !== "schedule";
   document.getElementById("page-results").hidden = page !== "results";
   document.getElementById("page-past").hidden = page !== "past";
+  document.getElementById("page-players").hidden = page !== "players";
   const other = document.getElementById("page-other");
   other.hidden = page !== "hotel";
   if (page === "hotel") document.getElementById("pending-title").textContent = "Hotel Info";
   if (page === "results") renderResults();
   if (page === "past") renderPast();
+  if (page === "players") renderPlayers();
+}
+
+// ---------- The Players ----------
+let psub = ORDER.includes(store.get("sajusbc-psub")) ? store.get("sajusbc-psub") : "u26";
+function renderPlayers() {
+  const P = window.PLAYERS || {};
+  const all = new Set(), groups = ORDER.reduce((n, ev) => n + ((P[ev] || {}).groups || []).length, 0);
+  ORDER.forEach((ev) => ((P[ev] || {}).groups || []).forEach((g) => g.members.forEach((m) => all.add(m.name))));
+  document.getElementById("phead").innerHTML = `<h2>${icon("people")} The Players</h2><p>Meet the ${all.size} juniors entered in the 2026 Sam Amer JUSBC, across ${groups} teams and pairs in five categories. Photos and profiles come from the World Bridge Federation for players who have represented the USA internationally.</p>`;
+  const nav = document.getElementById("pcats");
+  nav.innerHTML = ORDER.map((id) => { const c = P[id] || { groups: [] }; return `<button class="tab" role="tab" aria-selected="${id === psub}" data-id="${id}" style="--c:${color(id)}"><i aria-hidden="true">${EVENTS[id].suit}︎</i><b>${EVENTS[id].name}</b><span>${c.groups.length} ${c.type === "teams" ? "teams" : "pairs"}</span></button>`; }).join("");
+  nav.querySelectorAll(".tab").forEach((b) => b.addEventListener("click", () => { psub = b.dataset.id; store.set("sajusbc-psub", psub); renderPlayers(); }));
+  const c = P[psub] || { groups: [] }, v = document.getElementById("pview");
+  v.style.setProperty("--c", color(psub));
+  const initials = (n) => n.split(/\s+/).filter(Boolean).map((w) => w[0]).slice(0, 2).join("").toUpperCase();
+  const person = (m) => {
+    const pic = m.photo ? `<img src="${esc(m.photo)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ini',textContent:'${initials(m.name)}'}))">` : `<span class="ini">${esc(initials(m.name))}</span>`;
+    const role = m.role === "captain" ? '<em class="role">Captain</em>' : m.role === "npc" ? '<em class="role">NPC</em>' : "";
+    const name = m.wbf ? `<a href="${esc(m.wbf)}" target="_blank" rel="noopener" title="World Bridge Federation profile">${esc(m.name)}</a>` : esc(m.name);
+    return `<li class="person">${pic}<span class="pn">${name}${role}</span></li>`;
+  };
+  v.innerHTML = `<div class="pgrid ${c.type}">${c.groups.map((g) => `<section class="pgroup"><h4>${c.type === "teams" ? "Team " + esc(g.name) : esc(g.name)}</h4><ul>${g.members.map(person).join("")}</ul></section>`).join("")}</div>
+    <p class="rnote pfoot">Entries as listed on usbf.org. Names link to World Bridge Federation profiles where one exists.</p>`;
 }
 
 // ---------- Past JUSBCs ----------
