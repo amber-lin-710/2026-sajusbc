@@ -21,6 +21,7 @@ img { max-width: 100%; }
 /* Palette: taken from the USBF mark — raspberry (♥♦) and royal blue (♠♣) on a warm white, deep aubergine ink */
 :root {
   --bg: #eeeef2;
+  --frame: #34436e; /* softer navy for the side bands (usbf.org layout) */
   --surface: #ffffff;
   --ink: #1b1b3a;
   --navy: #13136e;
@@ -48,21 +49,22 @@ img { max-width: 100%; }
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0e0f22; --surface: #17183a; --ink: #ececf6; --navy: #c9cbff; --muted: #a2a4c2; --line: #2c2e55; --meal: #22244a;
+    --bg: #0e0f22; --frame: #070816; --surface: #17183a; --ink: #ececf6; --navy: #c9cbff; --muted: #a2a4c2; --line: #2c2e55; --meal: #22244a;
     --accent: #ff6b7d; --evening: #4a4c78; --on-evening: #ececf6; --on-accent: #0e0f22; --head: #23255a; --zebra: #1b1c44; --rule: #7f82a8;
     --ev-u26: #6fa6e6; --ev-u21: #6cc77e; --ev-u26w: #f0c44c; --ev-u16: #f27a82; --ev-chal: #b493ea;
     --tint: 20%; --shade-camp: 34%; --shade-play: 14%; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0e0f22; --surface: #17183a; --ink: #ececf6; --navy: #c9cbff; --muted: #a2a4c2; --line: #2c2e55; --meal: #22244a;
+  --bg: #0e0f22; --frame: #070816; --surface: #17183a; --ink: #ececf6; --navy: #c9cbff; --muted: #a2a4c2; --line: #2c2e55; --meal: #22244a;
   --accent: #ff6b7d; --evening: #4a4c78; --on-evening: #ececf6; --on-accent: #0e0f22; --head: #23255a; --zebra: #1b1c44; --rule: #7f82a8;
   --ev-u26: #6fa6e6; --ev-u21: #6cc77e; --ev-u26w: #f0c44c; --ev-u16: #f27a82; --ev-chal: #b493ea;
   --tint: 20%; --shade-camp: 34%; --shade-play: 14%; color-scheme: dark;
 }
 * { box-sizing: border-box; }
-body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.45; }
-.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 56px; }
+/* usbf.org-style frame: navy bands left and right, light grey content column in the middle */
+body { background: var(--frame); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.45; min-height: 100vh; }
+.wrap { max-width: 1240px; min-height: 100vh; margin: 0 auto; padding-inline: 20px; padding-block: 28px 56px; background: var(--bg); box-shadow: 0 0 0 1px color-mix(in srgb, var(--frame) 60%, #000); }
 
 header.mast { display: grid; gap: 6px; padding-bottom: 18px; border-bottom: 3px solid var(--navy); }
 header.mast .brandbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px; padding-bottom: 14px; margin-bottom: 8px; border-bottom: 1px solid var(--line); }
