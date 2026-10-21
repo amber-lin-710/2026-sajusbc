@@ -244,9 +244,13 @@ table.st td.rk { font-weight: 700; color: var(--c); }
 .art > span { display: flex; align-items: center; gap: 8px; }
 .art .ico { width: 16px; height: 16px; }
 @media (max-width: 560px) { .hmed { grid-template-columns: 1fr; } .hcount { gap: 20px; } }
-.wgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px; }
+.wgrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.wcard img, .wph { width: 100%; aspect-ratio: 16 / 9; }
+.wph { display: grid; place-items: center; align-content: center; gap: 6px; background: color-mix(in srgb, var(--c) var(--shade-play), var(--surface)); border-bottom: 1px dashed var(--line); color: var(--muted); font-weight: 600; font-size: 14px; }
+.wph span { font-size: 40px; color: var(--c); line-height: 1; }
+@media (max-width: 720px) { .wgrid { grid-template-columns: 1fr; } }
 .wcard { margin: 0; background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--c); display: grid; grid-template-rows: auto 1fr; }
-.wcard img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; background: var(--head); }
+.wcard img { object-fit: cover; display: block; background: var(--head); }
 .wcard figcaption { padding: 10px 12px 12px; display: grid; gap: 3px; align-content: start; }
 .wcard .wk { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c); }
 .wcard .wk .suit { margin-right: 5px; }
@@ -463,7 +467,7 @@ footer { margin-top: 28px; font-size: 13px; color: var(--muted); }
 </div>
 
 <script src="players-data.js?v=58c26ca6"></script>
-<script src="past-data.js?v=3928c660"></script>
+<script src="past-data.js?v=1544cae1"></script>
 <script src="results-data.js?v=402ca9cc"></script>
 <script>
 const EVENTS = {
@@ -717,7 +721,7 @@ function renderPast() {
   const medalsHtml = `<div class="hero">${F.logo ? `<img class="hlogo2" src="${esc(F.logo.src)}" alt="${esc(F.logo.alt)}">` : ""}
     <div class="hcount">${["Gold", "Silver", "Bronze"].filter((m) => tally[m]).map((m) => `<div>${medal(MEDAL_PLACE[m])}<b>${tally[m]}</b><span>${m}</span></div>`).join("")}</div>
     <ul class="hmed">${F.medals.map((m) => `<li style="--c:${color(m.ev)}">${medal(MEDAL_PLACE[m.medal])}<span><b>${suit(m.ev)}${EVENTS[m.ev].name} ${esc(m.team)}</b><small>${m.medal} medal</small></span></li>`).join("")}</ul></div>`;
-  const winner = (w) => `<figure class="wcard" style="--c:${color(w.ev)}"><img src="${esc(w.photo)}" alt="${esc(`${EVENTS[w.ev].name} ${w.label}: ${w.names}`)}" loading="lazy"><figcaption><span class="wk">${suit(w.ev)}${EVENTS[w.ev].name} · ${esc(w.label)}</span><b>${esc(w.title)}</b><span class="wn">${esc(w.names)}</span>${w.medal ? `<span class="wm">${medal(MEDAL_PLACE[w.medal])}Won ${w.medal.toLowerCase()} at the 2025 World Youth Championships</span>` : ""}<small>${w.world_photo ? "Photo from the 2025 World Youth Championships · " : ""}Photo: ${esc(w.credit)}</small></figcaption></figure>`;
+  const winner = (w) => `<figure class="wcard" style="--c:${color(w.ev)}">${w.photo ? `<img src="${esc(w.photo)}" alt="${esc(`${EVENTS[w.ev].name} ${w.label}: ${w.names}`)}" loading="lazy">` : `<div class="wph"><span>${suit(w.ev)}</span>Photo coming soon</div>`}<figcaption><span class="wk">${suit(w.ev)}${EVENTS[w.ev].name} · ${esc(w.label)}</span><b>${esc(w.title)}</b><span class="wn">${esc(w.names)}</span>${w.medal ? `<span class="wm">${medal(MEDAL_PLACE[w.medal])}Won ${w.medal.toLowerCase()} at the 2025 World Youth Championships</span>` : ""}${w.photo ? `<small>${w.world_photo ? "At the 2025 World Youth Championships" : ""}${w.credit ? ` · Photo: ${esc(w.credit)}` : ""}</small>` : ""}</figcaption></figure>`;
   const shots = [F.team_photo.src, ...F.camp];
   const gallery = `<div class="photos"><figure class="teamshot"><button class="gph" data-i="0" aria-label="Open the Team USA photo"><img src="${esc(F.team_photo.src)}" alt="${esc(F.team_photo.caption)}"></button><figcaption>${esc(F.team_photo.caption)} · Photo: ${esc(F.team_photo.credit)}</figcaption></figure>
     <div class="gallery">${F.camp.map((src, i) => `<button class="gph" data-i="${i + 1}" aria-label="Open photo ${i + 1} of ${F.camp.length}"><img src="${esc(src)}" alt="" loading="lazy"></button>`).join("")}<p class="gcap">From the ${esc(F.event)}</p></div></div>`;
@@ -730,7 +734,7 @@ function renderPast() {
   el.innerHTML = `<div class="rhead"><h2>${icon("history")} Past JUSBCs</h2><p>The ${esc(F.event)} chose the US teams for the ${esc(F.wybtc)} in ${esc(F.where)}, where they brought home ${F.medals.length} medals.</p></div>
     ${medalsHtml}
     ${(F.articles || []).length ? `<div class="arts">${F.articles.map((a) => `<div class="art"><span>${icon("doc")}<b>${esc(a.label)}</b></span>${linkChips([{ label: "PDF", url: a.pdf, kind: "doc" }, { label: "ACBL online issue", url: a.online, kind: "doc" }])}</div>`).join("")}</div>` : ""}
-    <section class="rsec"><h3>${icon("trophy")}${F.year} champions and 2025 medalists</h3><div class="wgrid">${F.winners.map(winner).join("")}</div></section>
+    <section class="rsec"><h3>${icon("trophy")}The 2025 US teams</h3><p class="rnote">Chosen at the ${esc(F.event)}.</p><div class="wgrid">${F.winners.map(winner).join("")}</div></section>
     <section class="rsec"><h3>${icon("camp")}Photos</h3>${gallery}</section>
     <section class="rsec"><h3>${icon("history")}Every JUSBC since 2009</h3><p class="rnote">Winners and world results for each edition, compiled from usbf.org. Select a year to expand it.</p><div class="peds">${P.map(edition).join("")}</div></section>
     <div id="lightbox" hidden><button class="lbx" aria-label="Close">×</button><button class="lbp" aria-label="Previous photo">‹</button><img alt=""><button class="lbn" aria-label="Next photo">›</button></div>`;
