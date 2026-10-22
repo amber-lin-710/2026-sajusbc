@@ -477,7 +477,7 @@ footer { margin-top: 28px; font-size: 13px; color: var(--muted); }
 </div>
 
 <script src="players-data.js?v=58c26ca6"></script>
-<script src="past-data.js?v=647fc774"></script>
+<script src="past-data.js?v=73d3af71"></script>
 <script src="results-data.js?v=402ca9cc"></script>
 <script>
 const EVENTS = {
@@ -734,7 +734,7 @@ function renderPast() {
   const winner = (w) => `<figure class="wcard" style="--c:${color(w.ev)}">${w.photo ? `<img src="${esc(w.photo)}" alt="${esc(`${EVENTS[w.ev].name} ${w.label}: ${w.names}`)}" loading="lazy">` : `<div class="wph"><span>${suit(w.ev)}</span>Photo coming soon</div>`}<figcaption><span class="wk">${suit(w.ev)}${EVENTS[w.ev].name} · ${esc(w.label)}</span><b>${esc(w.title)}</b><span class="wn">${esc(w.names)}</span>${w.medal ? `<span class="wm">${medal(MEDAL_PLACE[w.medal])}Won ${w.medal.toLowerCase()} at the 2025 World Youth Championships</span>` : ""}${w.photo ? `<small>${w.world_photo ? "At the 2025 World Youth Championships" : ""}${w.credit ? ` · Photo: ${esc(w.credit)}` : ""}</small>` : ""}</figcaption></figure>`;
   const shots = [F.team_photo.src, ...F.camp];
   const gallery = `<div class="photos"><figure class="teamshot"><button class="gph" data-i="0" aria-label="Open the Team USA photo"><img src="${esc(F.team_photo.src)}" alt="${esc(F.team_photo.caption)}"></button><figcaption>${esc(F.team_photo.caption)} · Photo: ${esc(F.team_photo.credit)}</figcaption></figure>
-    <div class="gallery">${F.camp.map((src, i) => `<button class="gph" data-i="${i + 1}" aria-label="Open photo ${i + 1} of ${F.camp.length}"><img src="${esc(src)}" alt="" loading="lazy"></button>`).join("")}<p class="gcap">From the ${esc(F.event)}</p></div></div>`;
+    <div class="gallery">${F.camp.map((src, i) => `<button class="gph" data-i="${i + 1}" aria-label="Open photo ${i + 1} of ${F.camp.length}"><img src="${esc(src)}" alt="" loading="lazy"></button>`).join("")}<p class="gcap">From the ${esc(F.event)}</p>${F.album ? `<div class="gcap">${linkChips([{ label: "See all photos in the Google Drive album", url: F.album, kind: "doc" }])}</div>` : ""}</div></div>`;
   // Every edition, collapsed
   const team = (label, t) => t ? `<div class="pt"><span class="pl">${label}</span><b>${t.team ? "Team " + esc(t.team) : ""}</b><span>${esc((t.players || []).join(", "))}${t.npc ? ` · NPC ${esc(t.npc)}` : ""}</span></div>` : "";
   const pairs = (c) => c.top_pairs ? `<div class="pt"><span class="pl">Top pairs</span><span>${c.top_pairs.map((p) => `${p.place ? p.place + ". " : ""}${esc((p.players || []).join(" & "))}`).join("<br>")}</span></div>` : "";
